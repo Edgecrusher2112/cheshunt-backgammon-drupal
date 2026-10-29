@@ -1,0 +1,46 @@
+name: Deploy Drupal Preview
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: drupal-preview
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Drupal Preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.DRUPAL_PREVIEW_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DRUPAL_PREVIEW_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy Drupal preview
+        env:
+          VPS_HOST: ${{ secrets.DRUPAL_PREVIEW_HOST }}
+        run: |
+          ssh \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            -o IdentitiesOnly=yes \
+            -i ~/.ssh/id_ed25519 \
+            -p 22 \
+            drupaldeploy@"$VPS_HOST" \
+            deploy
