@@ -1,0 +1,4 @@
+services:
+  backgammon_matches.results:
+    class: Drupal\backgammon_matches\Service\MatchResults
+    arguments: ['@entity_type.manager', '@lock', '@current_user']

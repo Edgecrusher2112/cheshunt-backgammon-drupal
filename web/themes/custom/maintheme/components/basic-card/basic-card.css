@@ -1,0 +1,7 @@
+.card .card-body p:last-child {
+  margin-bottom: 0;
+}
+
+.card .card-header {
+  text-transform: capitalize;
+}

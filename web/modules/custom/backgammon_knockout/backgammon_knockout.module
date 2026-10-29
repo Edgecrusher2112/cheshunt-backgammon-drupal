@@ -1,0 +1,153 @@
+<?php
+
+/**
+ * @file
+ * Tournament permissions, automatic advancement and bracket presentation.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\backgammon_matches\Utility\KnockoutRound;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+
+/** Implements hook_node_create(). */
+function backgammon_knockout_node_create(NodeInterface $node) {
+  if ($node->bundle() === 'backgammon_knockout') {
+    // Provide a required title before the season number is entered.
+    $node->setTitle('Pending');
+  }
+}
+
+/** Implements hook_node_presave(). */
+function backgammon_knockout_node_presave(NodeInterface $node) {
+  if ($node->bundle() === 'backgammon_knockout') {
+    // Keep titles consistent for forms, bracket advancement and API saves.
+    $node->setTitle('Knockout Season ' . $node->get('field_bk_season')->value);
+  }
+}
+
+/** Implements hook_form_BASE_FORM_ID_alter(). */
+function backgammon_knockout_form_node_form_alter(array &$form, FormStateInterface $state) {
+  if ($state->getFormObject()->getEntity()->bundle() === 'backgammon_knockout') {
+    if (isset($form['title'])) {
+      $form['title']['#access'] = FALSE;
+    }
+    $form['#validate'][] = 'backgammon_knockout_validate_tournament_form';
+  }
+}
+
+/** Validates the knockout date range. */
+function backgammon_knockout_validate_tournament_form(array &$form, FormStateInterface $state): void {
+  $tournament = $state->getFormObject()->getEntity();
+  if ($tournament->get('field_bk_start')->value > $tournament->get('field_bk_end')->value) {
+    $state->setErrorByName('field_bk_end', t('The end date must not precede the start date.'));
+  }
+}
+
+/** Implements hook_node_access(). */
+function backgammon_knockout_node_access(NodeInterface $node, $operation, AccountInterface $account) {
+  if ($node->bundle() !== 'backgammon_knockout' || !in_array($operation, ['update', 'delete'])) { return AccessResult::neutral(); }
+  return ($account->hasPermission('administer backgammon knockouts') ? AccessResult::allowed() : AccessResult::forbidden())->cachePerPermissions();
+}
+
+/** Implements hook_node_create_access(). */
+function backgammon_knockout_node_create_access(AccountInterface $account, array $context, $bundle) {
+  if ($bundle !== 'backgammon_knockout') { return AccessResult::neutral(); }
+  return ($account->hasPermission('administer backgammon knockouts') ? AccessResult::allowed() : AccessResult::forbidden())->cachePerPermissions();
+}
+
+/** Implements hook_node_update(). */
+function backgammon_knockout_node_update(NodeInterface $node) {
+  if ($node->bundle() !== 'backgammon_match' || !$node->hasField('field_bk_tournament') || $node->get('field_bk_tournament')->isEmpty()) { return; }
+  // Ignore the numeric-title update on initial fixture creation.
+  $original = $node->getOriginal();
+  if ($node->get('field_bg_score_1')->isEmpty() && $node->get('field_bg_score_2')->isEmpty()
+    && (!$original || ($original->get('field_bg_score_1')->isEmpty() && $original->get('field_bg_score_2')->isEmpty()))) { return; }
+  $id = $node->get('field_bk_tournament')->target_id;
+  try { \Drupal::service('backgammon_knockout.brackets')->synchronize($id); }
+  catch (\Throwable $exception) {
+    // Preserve the entered result and retry through cron if the draw is busy.
+    \Drupal::queue('backgammon_knockout_advance')->createItem(['id' => $id]);
+    \Drupal::logger('backgammon_knockout')->warning('Bracket advancement deferred: @message', ['@message' => $exception->getMessage()]);
+  }
+}
+
+/** Implements hook_ENTITY_TYPE_view(). */
+function backgammon_knockout_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() !== 'backgammon_knockout' || $view_mode !== 'full') { return; }
+  foreach (['field_bk_season', 'field_bk_start', 'field_bk_end', 'field_bk_target', 'field_bk_status', 'field_bk_players', 'field_bk_winner'] as $field) {
+    unset($build[$field]);
+  }
+  $bracket = json_decode($entity->get('field_bk_bracket')->value ?? '', TRUE) ?: [];
+  $cache = (new CacheableMetadata())->setCacheTags(['node_list:backgammon_match', 'user_list'])->setCacheContexts(['user.permissions', 'user.node_grants:view']);
+  $rows = [];
+  $round_count = count($bracket['rounds'] ?? []);
+  foreach ($bracket['rounds'] ?? [] as $round => $slots) {
+    $rows[] = [[
+      'data' => KnockoutRound::label($round + 1, $round_count),
+      'class' => ['text-center', 'fw-bold'],
+      'colspan' => 5,
+    ]];
+    foreach ($slots as $slot) {
+      $player_ids = array_values($slot['players'] ?? []);
+      $names = [t('Awaiting opponent'), count($player_ids) === 1 ? t('Bye') : t('Awaiting opponent')];
+      foreach ([0, 1] as $index) {
+        $uid = $player_ids[$index] ?? NULL;
+        if ($uid) {
+          $user = \Drupal::entityTypeManager()->getStorage('user')->load($uid);
+          if ($user) {
+            $names[$index] = $user->getDisplayName();
+            $cache->addCacheableDependency($user);
+          }
+        }
+      }
+      $scores = ['', ''];
+      $has_result = FALSE;
+      if (!empty($slot['match'])) {
+        $match = \Drupal::entityTypeManager()->getStorage('node')->load($slot['match']);
+        if ($match) {
+          $access = $match->access('view', NULL, TRUE);
+          $cache->addCacheableDependency($access)->addCacheableDependency($match);
+          if ($access->isAllowed() && \Drupal::service('backgammon_matches.results')->hasResult($match)) {
+            $has_result = TRUE;
+            $scores = [
+              $match->get('field_bg_score_1')->value,
+              $match->get('field_bg_score_2')->value,
+            ];
+          }
+        }
+      }
+      $player_1_classes = ['col-4', 'text-end', 'fw-bold'];
+      $player_2_classes = ['col-4', 'text-start', 'fw-bold'];
+      if ($has_result && (int) $scores[0] !== (int) $scores[1]) {
+        if ((int) $scores[0] < (int) $scores[1]) {
+          $player_1_classes[] = 'text-muted';
+        }
+        else {
+          $player_2_classes[] = 'text-muted';
+        }
+      }
+      $rows[] = [
+        ['data' => $names[0], 'class' => $player_1_classes],
+        ['data' => $scores[0], 'class' => ['col-1', 'text-center', 'text-primary']],
+        ['data' => $has_result ? 'v' : '-', 'class' => ['col-2', 'text-center', 'fw-bold']],
+        ['data' => $scores[1], 'class' => ['col-1', 'text-center', 'text-primary']],
+        ['data' => $names[1], 'class' => $player_2_classes],
+      ];
+    }
+  }
+  $build['knockout_bracket'] = [
+    '#type' => 'table',
+    '#rows' => $rows,
+    '#empty' => t('Save your players, then use Generate draw.'),
+    '#weight' => 40,
+  ];
+  if (!empty($bracket['conflicts'])) {
+    $build['knockout_conflicts'] = ['#theme' => 'item_list', '#title' => t('Bracket requires admin review'), '#items' => $bracket['conflicts'], '#weight' => 39];
+  }
+  CacheableMetadata::createFromRenderArray($build)->merge($cache)->applyTo($build);
+}

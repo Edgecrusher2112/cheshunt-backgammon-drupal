@@ -1,0 +1,171 @@
+<?php
+
+/**
+ * @file
+ * Creates Views-compatible seasons and the match-to-season relationship.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\Entity\NodeType;
+use Drupal\user\Entity\Role;
+
+/** Implements hook_install(). */
+function backgammon_league_install() {
+  if (!NodeType::load('backgammon_season')) {
+    NodeType::create(['type' => 'backgammon_season', 'name' => 'League', 'new_revision' => TRUE, 'display_submitted' => FALSE])->save();
+  }
+  Role::load('league_admin')?->grantPermission('administer backgammon leagues')->save();
+  $definitions = [
+    'field_bl_division' => ['Division number', 'integer', [], ['min' => 1], 'number', 'number_integer'],
+    'field_bl_season' => ['Season number', 'integer', [], ['min' => 1], 'number', 'number_integer'],
+    'field_bl_start' => ['Start date', 'datetime', ['datetime_type' => 'date'], [], 'datetime_default', 'datetime_default'],
+    'field_bl_end' => ['End date', 'datetime', ['datetime_type' => 'date'], [], 'datetime_default', 'datetime_default'],
+    'field_bl_meetings' => ['Meetings per pair', 'list_integer', ['allowed_values' => [1 => '1', 2 => '2', 3 => '3', 4 => '4']], [], 'options_select', 'list_default'],
+    'field_bl_matches_per_week' => ['Matches per match week', 'integer', [], ['min' => 1], 'number', 'number_integer'],
+    'field_bl_target' => ['Match target', 'list_integer', ['allowed_values' => [3 => '3', 5 => '5', 7 => '7', 9 => '9', 11 => '11', 13 => '13', 15 => '15']], [], 'options_select', 'list_default'],
+    'field_bl_status' => ['Season status', 'list_string', ['allowed_values' => ['active' => 'Active', 'completed' => 'Completed']], [], 'options_select', 'list_default'],
+    'field_bl_players' => ['Season players', 'entity_reference', ['target_type' => 'user'], ['handler' => 'default:user', 'handler_settings' => ['filter' => ['type' => 'role', 'role' => ['league_player' => 'league_player']]]], 'entity_reference_autocomplete', 'entity_reference_label'],
+    'field_bl_winner' => ['League winner', 'entity_reference', ['target_type' => 'user'], ['handler' => 'default:user'], NULL, NULL],
+    'field_bl_runner_up' => ['League runner-up', 'entity_reference', ['target_type' => 'user'], ['handler' => 'default:user'], NULL, NULL],
+    'field_bl_season_ref' => ['League season', 'entity_reference', ['target_type' => 'node'], ['handler' => 'default:node', 'handler_settings' => ['target_bundles' => ['backgammon_season' => 'backgammon_season']]], 'entity_reference_autocomplete', 'entity_reference_label'],
+  ];
+  foreach ($definitions as $name => [$label, $type, $storage_settings, $settings, $widget, $formatter]) {
+    $bundle = $name === 'field_bl_season_ref' ? 'backgammon_match' : 'backgammon_season';
+    if (!FieldStorageConfig::loadByName('node', $name)) {
+      FieldStorageConfig::create(['field_name' => $name, 'entity_type' => 'node', 'type' => $type, 'cardinality' => $name === 'field_bl_players' ? -1 : 1, 'settings' => $storage_settings])->save();
+    }
+    if (!FieldConfig::loadByName('node', $bundle, $name)) {
+      $default_value = match ($name) {
+        'field_bl_status' => [['value' => 'active']],
+        'field_bl_matches_per_week' => [['value' => 1]],
+        default => [],
+      };
+      FieldConfig::create(['field_name' => $name, 'entity_type' => 'node', 'bundle' => $bundle, 'label' => $label, 'settings' => $settings, 'required' => !in_array($name, ['field_bl_players', 'field_bl_winner', 'field_bl_runner_up', 'field_bl_season_ref']), 'default_value' => $default_value])->save();
+    }
+    $repository = \Drupal::service('entity_display.repository');
+    $form_display = $repository->getFormDisplay('node', $bundle);
+    $widget
+      ? $form_display->setComponent($name, ['type' => $widget, 'weight' => 20 + array_search($name, array_keys($definitions))])
+      : $form_display->removeComponent($name);
+    $form_display->save();
+    $view_display = $repository->getViewDisplay('node', $bundle);
+    $formatter
+      ? $view_display->setComponent($name, ['type' => $formatter, 'label' => 'above', 'weight' => 20 + array_search($name, array_keys($definitions))])
+      : $view_display->removeComponent($name);
+    $view_display->save();
+  }
+  \Drupal::service('entity_display.repository')->getFormDisplay('node', 'backgammon_season')->setComponent('title', ['type' => 'string_textfield', 'weight' => -10])->save();
+}
+
+/**
+ * Adds extended match targets and a fourth meeting per player pair.
+ */
+function backgammon_league_update_10003(): void {
+  $settings = [
+    'field_bl_target' => [3 => '3', 5 => '5', 7 => '7', 9 => '9', 11 => '11', 13 => '13', 15 => '15'],
+    'field_bl_meetings' => [1 => '1', 2 => '2', 3 => '3', 4 => '4'],
+  ];
+  foreach ($settings as $field_name => $allowed_values) {
+    $storage = FieldStorageConfig::loadByName('node', $field_name);
+    if ($storage) {
+      $storage->setSetting('allowed_values', $allowed_values);
+      $storage->save();
+    }
+  }
+}
+
+/**
+ * Adds the number of fixtures displayed in each match week.
+ */
+function backgammon_league_update_10001() {
+  $field_name = 'field_bl_matches_per_week';
+  if (!FieldStorageConfig::loadByName('node', $field_name)) {
+    FieldStorageConfig::create([
+      'field_name' => $field_name,
+      'entity_type' => 'node',
+      'type' => 'integer',
+      'cardinality' => 1,
+    ])->save();
+  }
+  if (!FieldConfig::loadByName('node', 'backgammon_season', $field_name)) {
+    FieldConfig::create([
+      'field_name' => $field_name,
+      'entity_type' => 'node',
+      'bundle' => 'backgammon_season',
+      'label' => 'Matches per match week',
+      'required' => TRUE,
+      'settings' => ['min' => 1],
+      'default_value' => [['value' => 1]],
+    ])->save();
+  }
+
+  $repository = \Drupal::service('entity_display.repository');
+  $repository->getFormDisplay('node', 'backgammon_season')
+    ->setComponent($field_name, ['type' => 'number', 'weight' => 25])
+    ->save();
+  $repository->getViewDisplay('node', 'backgammon_season')
+    ->setComponent($field_name, ['type' => 'number_integer', 'label' => 'above', 'weight' => 25])
+    ->save();
+
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $ids = $storage->getQuery()->accessCheck(FALSE)
+    ->condition('type', 'backgammon_season')
+    ->notExists($field_name)
+    ->execute();
+  foreach ($storage->loadMultiple($ids) as $season) {
+    $season->set($field_name, 1)->save();
+  }
+
+  return t('Added matches per match week to league seasons.');
+}
+
+/**
+ * Adds stored winner and runner-up references to completed league seasons.
+ */
+function backgammon_league_update_10002(): void {
+  $fields = [
+    'field_bl_winner' => ['League winner', 'e79bb0d5-319f-4f26-ad63-e668a836343b', '989fcfba-8234-468d-a92f-34967e69be50'],
+    'field_bl_runner_up' => ['League runner-up', '0afb932d-504c-45ef-bfa1-c3af4bd5e9dc', '62f0abf7-d1e3-400c-9f4b-6da980df165b'],
+  ];
+  $repository = \Drupal::service('entity_display.repository');
+  foreach ($fields as $field_name => [$label, $storage_uuid, $field_uuid]) {
+    if (!FieldStorageConfig::loadByName('node', $field_name)) {
+      FieldStorageConfig::create([
+        'uuid' => $storage_uuid,
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'type' => 'entity_reference',
+        'settings' => ['target_type' => 'user'],
+        'cardinality' => 1,
+      ])->save();
+    }
+    if (!FieldConfig::loadByName('node', 'backgammon_season', $field_name)) {
+      FieldConfig::create([
+        'uuid' => $field_uuid,
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'bundle' => 'backgammon_season',
+        'label' => $label,
+        'settings' => ['handler' => 'default:user'],
+      ])->save();
+    }
+    $repository->getFormDisplay('node', 'backgammon_season')
+      ->removeComponent($field_name)
+      ->save();
+    $repository->getViewDisplay('node', 'backgammon_season')
+      ->removeComponent($field_name)
+      ->save();
+  }
+
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $ids = $storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'backgammon_season')
+    ->condition('field_bl_status', 'completed')
+    ->execute();
+  foreach ($storage->loadMultiple($ids) as $season) {
+    \Drupal::service('backgammon_league.seasons')->assignPlacings($season);
+    $season->save();
+  }
+}

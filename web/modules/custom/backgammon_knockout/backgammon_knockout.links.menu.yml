@@ -1,0 +1,5 @@
+backgammon_knockout.list:
+  title: Knockouts
+  route_name: backgammon_knockout.list
+  menu_name: account
+  weight: 7

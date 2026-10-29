@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Displays the user account menu as a Bootstrap dropdown.
+ */
+#}
+{% if items %}
+  <div class="dropdown account-dropdown">
+    <button class="btn account-dropdown__toggle dropdown-toggle" type="button"
+            id="account-menu-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false" aria-label="{{ 'User account menu'|t }}"
+            title="{{ 'User account menu'|t }}">
+      <i class="bi bi-person-fill" aria-hidden="true"></i>
+    </button>
+    <ul{{ attributes.addClass(['dropdown-menu', 'dropdown-menu-end', 'bg-light']) }} aria-labelledby="account-menu-toggle">
+      {% for item in items %}
+        <li{{ item.attributes }}>
+          <a href="{{ item.url }}" class="dropdown-item text-capitalize{{ item.in_active_trail ? ' active' }}"
+             {% if item.in_active_trail %}aria-current="page"{% endif %}>{{ item.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}

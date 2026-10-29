@@ -1,0 +1,5 @@
+backgammon_league.fixtures:
+  title: Update fixtures
+  route_name: backgammon_league.fixtures
+  base_route: entity.node.canonical
+  weight: 6

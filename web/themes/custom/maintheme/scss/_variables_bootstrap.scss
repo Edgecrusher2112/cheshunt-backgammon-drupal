@@ -1,0 +1,98 @@
+// Site palette: light mode.
+$color-primary: #ff2d78;
+$color-secondary: #00ff87;
+$color-accent: #00d4ff;
+$color-background: #fff;
+$color-surface: #fff;
+$color-text: #0a0a0a;
+
+// Site palette: dark mode.
+$color-background-dark: #0a0a0f;
+$color-surface-dark: #0e0e15;
+$color-text-dark: #f0f0ff;
+
+// Bootstrap colour system.
+$primary: $color-primary;
+$secondary: $color-secondary;
+$info: $color-accent;
+$light: $color-surface;
+$dark: $color-background-dark;
+
+$body-bg: $color-background;
+$body-color: $color-text;
+$body-secondary-bg: $color-surface;
+$body-tertiary-bg: #e2e2f2;
+$body-secondary-color: rgba($color-text, .72);
+$body-tertiary-color: rgba($color-text, .55);
+$emphasis-color: #000;
+$border-color: #cacae0;
+$border-color-translucent: rgba($color-text, .14);
+
+// Keep Bootstrap's dark colour mode aligned with the site palette.
+$body-bg-dark: $color-background-dark;
+$body-color-dark: $color-text-dark;
+$body-secondary-bg-dark: $color-surface-dark;
+$body-tertiary-bg-dark: #181820;
+$body-secondary-color-dark: rgba($color-text-dark, .72);
+$body-tertiary-color-dark: rgba($color-text-dark, .55);
+$emphasis-color-dark: #fff;
+$border-color-dark: #292934;
+$border-color-translucent-dark: rgba($color-text-dark, .14);
+
+$link-color: $color-primary;
+$link-hover-color: mix(#fff, $color-primary, 20%);
+$focus-ring-color: rgba($primary, .35);
+$component-active-color: $color-background;
+$component-active-bg: $color-primary;
+
+$card-bg: $color-surface;
+$card-border-color: $border-color-translucent;
+$dropdown-bg: $color-surface;
+$dropdown-color: $color-text;
+$dropdown-border-color: $border-color-translucent;
+$dropdown-link-color: $color-text;
+$dropdown-link-hover-color: $color-text;
+$dropdown-link-hover-bg: #e2e2f2;
+$dropdown-link-active-color: $color-background;
+$dropdown-link-active-bg: $color-primary;
+
+$input-bg: #fff;
+$input-color: $color-text;
+$input-border-color: #b8b8ce;
+$input-focus-bg: #fff;
+$input-focus-color: $color-text;
+$input-focus-border-color: $primary;
+$input-placeholder-color: rgba($color-text, .5);
+
+$table-color: $color-text;
+$table-bg: transparent;
+$table-border-color: $border-color;
+$table-striped-color: $color-text;
+$table-striped-bg: rgba($color-text, .035);
+$table-hover-color: $color-text;
+$table-hover-bg: rgba($color-primary, .06);
+
+// Typography
+$font-family-sans-serif: 'PT Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$headings-font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+$line-height-base:            1.6;
+$font-size-base:              1.2rem;
+// scss-docs-end font-variables
+
+$bootstrap-icons-font-dir: "../fonts";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons";
+
+$container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+);
+
+// Grid columns
+//
+// Set the number of columns and specify the width of the gutters.
+
+$grid-gutter-width:           2rem;

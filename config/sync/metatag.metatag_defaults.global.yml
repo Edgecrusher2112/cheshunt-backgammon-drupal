@@ -1,0 +1,12 @@
+uuid: d4cce721-c471-4c9b-bbb9-40466e25f0bf
+langcode: en-gb
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: sL588ui1E_8-2c_UupwyYxcqX2OVyMFp3HTLbbFqvPc
+id: global
+label: Global
+tags:
+  canonical_url: '[current-page:url]'
+  description: 'Are you interested in playing Backgammon (Tavla) in the Cheshunt area in Hertfordshire? I am looking to set up a local backgammon club for the Cheshunt, Hoddesdon, Broxbourne area in East Herts.'
+  title: '[site:name] | [current-page:title]'

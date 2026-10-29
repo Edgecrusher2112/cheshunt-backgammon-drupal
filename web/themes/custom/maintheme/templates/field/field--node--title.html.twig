@@ -1,0 +1,8 @@
+{# Inline node titles sit inside headings and do not need a span wrapper. #}
+{% if not is_inline %}
+  {% include 'field.html.twig' %}
+{% else %}
+  {%- for item in items -%}
+    {{ item.content }}
+  {%- endfor -%}
+{% endif %}

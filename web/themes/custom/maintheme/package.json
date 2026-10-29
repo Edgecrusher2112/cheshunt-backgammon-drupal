@@ -1,0 +1,21 @@
+{
+  "name": "maintheme",
+  "version": "1.0.0",
+  "description": "[Bootstrap 5](https://www.drupal.org/project/bootstrap5) subtheme.",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass --quiet-deps --silence-deprecation=abs-percent,import,global-builtin,color-functions scss/style.scss css/style.css --watch",
+    "assets:fontawesome": "node scripts/copy-fontawesome.js",
+    "postinstall": "npm run assets:fontawesome"
+  },
+  "devDependencies": {
+    "sass": "^1.94.2"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "7.3.1",
+    "bootstrap-icons": "^1.13.1"
+  }
+}

@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * @file
+ * Creates the reusable Match bundle, fields, displays and competition roles.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\Entity\NodeType;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_install().
+ */
+function backgammon_matches_install() {
+  $type = NodeType::load('backgammon_match');
+  if (!$type) {
+    NodeType::create([
+      'type' => 'backgammon_match',
+      'name' => 'Match',
+      'description' => 'A match shared by leagues and knockout competitions.',
+      'new_revision' => TRUE,
+      'display_submitted' => FALSE,
+    ])->save();
+  }
+
+  // Roles receive only module permissions. Participants cannot edit whole nodes.
+  foreach ([
+    'league_player' => ['League player', 'enter backgammon results'],
+    'league_admin' => ['League Admin', 'administer backgammon matches'],
+  ] as $id => [$label, $permission]) {
+    $role = Role::load($id) ?: Role::create(['id' => $id, 'label' => $label]);
+    $role->grantPermission('access content')->grantPermission($permission)->save();
+  }
+
+  $fields = [];
+  foreach ([1, 2] as $player) {
+    $fields['field_bg_player_' . $player] = [
+      'label' => 'Player ' . $player,
+      'type' => 'entity_reference',
+      'storage' => ['target_type' => 'user'],
+      'settings' => [
+        'handler' => 'default:user',
+        'handler_settings' => ['filter' => ['type' => 'role', 'role' => ['league_player' => 'league_player']]],
+      ],
+      'required' => TRUE,
+      'widget' => 'entity_reference_autocomplete',
+      'formatter' => 'entity_reference_label',
+    ];
+  }
+  $fields['field_bg_target'] = [
+    'label' => 'First to points',
+    'type' => 'list_integer',
+    'storage' => ['allowed_values' => [3 => '3', 5 => '5', 7 => '7', 9 => '9', 11 => '11', 13 => '13', 15 => '15']],
+    'required' => TRUE,
+    'widget' => 'options_select',
+    'formatter' => 'list_default',
+  ];
+  foreach ([1, 2] as $player) {
+    foreach (['score' => 'Score', 'gammons' => 'Gammons', 'backgammons' => 'Backgammons'] as $suffix => $label) {
+      $fields['field_bg_' . $suffix . '_' . $player] = [
+        'label' => 'Player ' . $player . ' ' . strtolower($label),
+        'type' => 'integer',
+        'settings' => ['min' => 0],
+        'widget' => 'number',
+        'formatter' => 'number_integer',
+        // Empty scores mean a fixture is awaiting its initial result.
+        'default' => $suffix === 'score' ? [] : [['value' => 0]],
+      ];
+    }
+  }
+
+  $repository = \Drupal::service('entity_display.repository');
+  $form = $repository->getFormDisplay('node', 'backgammon_match');
+  $view = $repository->getViewDisplay('node', 'backgammon_match');
+  $form->setComponent('title', ['type' => 'string_textfield', 'weight' => -10]);
+  foreach ($fields as $name => $definition) {
+    if (!FieldStorageConfig::loadByName('node', $name)) {
+      FieldStorageConfig::create([
+        'entity_type' => 'node',
+        'field_name' => $name,
+        'type' => $definition['type'],
+        'cardinality' => 1,
+        'settings' => $definition['storage'] ?? [],
+      ])->save();
+    }
+    if (!FieldConfig::loadByName('node', 'backgammon_match', $name)) {
+      FieldConfig::create([
+        'entity_type' => 'node',
+        'bundle' => 'backgammon_match',
+        'field_name' => $name,
+        'label' => $definition['label'],
+        'required' => $definition['required'] ?? FALSE,
+        'settings' => $definition['settings'] ?? [],
+        'default_value' => $definition['default'] ?? [],
+      ])->save();
+    }
+    $weight = array_search($name, array_keys($fields));
+    $form->setComponent($name, ['type' => $definition['widget'], 'weight' => $weight]);
+    $view->setComponent($name, ['type' => $definition['formatter'], 'label' => 'above', 'weight' => $weight]);
+  }
+  $form->save();
+  $view->save();
+}
+
+/**
+ * Adds the extended odd-numbered match targets.
+ */
+function backgammon_matches_update_12001(): void {
+  $storage = FieldStorageConfig::loadByName('node', 'field_bg_target');
+  if ($storage) {
+    $storage->setSetting('allowed_values', [3 => '3', 5 => '5', 7 => '7', 9 => '9', 11 => '11', 13 => '13', 15 => '15']);
+    $storage->save();
+  }
+}

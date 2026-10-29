@@ -1,0 +1,128 @@
+<?php
+
+/**
+ * @file
+ * Primarily Drupal hooks and global API functions to exclude node titles.
+ *
+ * This is the main module file for Exclude Node Title.
+ */
+
+use Drupal\Core\Hook\Attribute\LegacyHook;
+use Drupal\exclude_node_title\Hook\ExcludeNodeTitleHooks;
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_help().
+ */
+#[LegacyHook]
+function exclude_node_title_help($route_name, RouteMatchInterface $route_match) {
+  return \Drupal::service(ExcludeNodeTitleHooks::class)->help($route_name, $route_match);
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+#[LegacyHook]
+function exclude_node_title_preprocess_html(&$vars): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->preprocessHtml($vars);
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+#[LegacyHook]
+function exclude_node_title_preprocess_page_title(&$vars): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->preprocessPageTitle($vars);
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+#[LegacyHook]
+function exclude_node_title_preprocess_page(&$vars): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->preprocessPage($vars);
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+#[LegacyHook]
+function exclude_node_title_preprocess_node(&$vars): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->preprocessNode($vars);
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+#[LegacyHook]
+function exclude_node_title_preprocess_field(&$vars): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->preprocessField($vars);
+}
+
+/**
+ * Implements hook_preprocess_search_result().
+ */
+#[LegacyHook]
+function exclude_node_title_preprocess_search_result(&$vars): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->preprocessSearchResult($vars);
+}
+
+/**
+ * Implements hook_node_update().
+ */
+#[LegacyHook]
+function exclude_node_title_node_update(NodeInterface $node): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->nodeUpdate($node);
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+#[LegacyHook]
+function exclude_node_title_node_insert(NodeInterface $node): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->nodeInsert($node);
+}
+
+/**
+ * Implements hook_node_delete().
+ */
+#[LegacyHook]
+function exclude_node_title_node_delete(NodeInterface $node): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->nodeDelete($node);
+}
+
+/**
+ * Implements hook_form_node_form_alter().
+ */
+#[LegacyHook]
+function exclude_node_title_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  return \Drupal::service(ExcludeNodeTitleHooks::class)->formNodeFormAlter($form, $form_state, $form_id);
+}
+
+/**
+ * Implements hook_field_attach_delete_bundle().
+ */
+#[LegacyHook]
+function exclude_node_title_field_attach_delete_bundle($entity_type, $bundle, $instances): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)
+    ->fieldAttachDeleteBundle($entity_type, $bundle, $instances);
+}
+
+/**
+ * Implements hook_ds_fields_info_alter().
+ */
+#[LegacyHook]
+function exclude_node_title_ds_fields_info_alter(&$plugins): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->dsFieldsInfoAlter($plugins);
+}
+
+/**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+#[LegacyHook]
+function exclude_node_title_block_view_page_title_block_alter(array &$build, BlockPluginInterface $block): void {
+  \Drupal::service(ExcludeNodeTitleHooks::class)->blockViewPageTitleBlockAlter($build, $block);
+}

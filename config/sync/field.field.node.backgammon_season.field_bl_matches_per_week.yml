@@ -1,0 +1,25 @@
+uuid: 18f63c4b-d141-4d4f-8523-bdd4c98980f4
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bl_matches_per_week
+    - node.type.backgammon_season
+id: node.backgammon_season.field_bl_matches_per_week
+field_name: field_bl_matches_per_week
+entity_type: node
+bundle: backgammon_season
+label: 'Matches P/W'
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

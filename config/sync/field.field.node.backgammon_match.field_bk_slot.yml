@@ -1,0 +1,23 @@
+uuid: 91147094-3322-4e42-a84c-7dae4ea54c04
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bk_slot
+    - node.type.backgammon_match
+id: node.backgammon_match.field_bk_slot
+field_name: field_bk_slot
+entity_type: node
+bundle: backgammon_match
+label: 'Bracket position'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

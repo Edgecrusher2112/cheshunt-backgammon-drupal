@@ -1,0 +1,33 @@
+uuid: 9d3cacce-24bf-4574-b123-40e154cffe89
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - user
+  theme:
+    - maintheme
+_core:
+  default_config_hash: oim10Z-LEGTqn9BE5jIZB2hMLKF08Ak08t7t61S2-mE
+id: maintheme_local_tasks
+theme: maintheme
+region: content
+weight: -1
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  attributes:
+    class: ''
+  primary: true
+  secondary: true
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      administrator: administrator

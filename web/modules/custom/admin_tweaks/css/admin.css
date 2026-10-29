@@ -1,0 +1,59 @@
+/* Attendee paragraph admin layout */
+  .class-row {
+      display: grid;
+      column-gap: 2rem;
+  }
+
+  .class-row.col-1 {
+      grid-template-columns: 1fr;
+  }
+
+  .class-row.col-2 {
+      grid-template-columns: 1fr 1fr;
+  }
+
+  .class-row.col-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .class-row.col-4 {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  .class-row.col-75-25 {
+      grid-template-columns: 3fr 1fr;
+  }
+
+  .class-row .form-item {
+      width: 100%;
+  }
+
+  .class-row .form-item input,
+  .class-row .form-item select,
+  .class-row .form-item .claro-autocomplete {
+      width: 100%;
+  }
+/* Attendee paragraph admin layout */
+
+/* Hide revision information */
+.entity-content-form-revision-information {
+  display: none;
+}
+/* Hide revision information */
+
+/*********************************
+************ Tablet  *************
+*********************************/
+@media (min-width: 768px) {
+  .class-row.col-4 {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+/*********************************
+************ Desktop  ************
+*********************************/
+@media (min-width: 992px) {
+
+
+}

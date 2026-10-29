@@ -1,0 +1,42 @@
+uuid: 2cc85c15-9ce0-4e31-898f-913fae933cc7
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.field.node.backgammon_season.field_bl_division
+    - field.field.node.backgammon_season.field_bl_end
+    - field.field.node.backgammon_season.field_bl_matches_per_week
+    - field.field.node.backgammon_season.field_bl_meetings
+    - field.field.node.backgammon_season.field_bl_players
+    - field.field.node.backgammon_season.field_bl_runner_up
+    - field.field.node.backgammon_season.field_bl_season
+    - field.field.node.backgammon_season.field_bl_start
+    - field.field.node.backgammon_season.field_bl_status
+    - field.field.node.backgammon_season.field_bl_target
+    - field.field.node.backgammon_season.field_bl_winner
+    - node.type.backgammon_season
+  module:
+    - user
+id: node.backgammon_season.default
+targetEntityType: node
+bundle: backgammon_season
+mode: default
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_bl_division: true
+  field_bl_end: true
+  field_bl_matches_per_week: true
+  field_bl_meetings: true
+  field_bl_players: true
+  field_bl_runner_up: true
+  field_bl_season: true
+  field_bl_start: true
+  field_bl_status: true
+  field_bl_target: true
+  field_bl_winner: true
+  langcode: true

@@ -1,0 +1,18 @@
+uuid: 6696b63c-80f3-4fac-99ef-caa79461c4b3
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - backgammon_knockout
+    - backgammon_league
+    - backgammon_matches
+    - system
+id: league_admin
+label: 'League Admin'
+weight: 5
+is_admin: false
+permissions:
+  - 'access content'
+  - 'administer backgammon knockouts'
+  - 'administer backgammon leagues'
+  - 'administer backgammon matches'

@@ -1,0 +1,31 @@
+uuid: ffa232c5-87b8-473e-8b1b-ab4dc1b8abf0
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tournament_reference
+    - node.type.backgammon_knockout
+    - node.type.backgammon_season
+    - node.type.news
+id: node.news.field_tournament_reference
+field_name: field_tournament_reference
+entity_type: node
+bundle: news
+label: 'Tournament Reference'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      backgammon_knockout: backgammon_knockout
+      backgammon_season: backgammon_season
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: backgammon_knockout
+field_type: entity_reference

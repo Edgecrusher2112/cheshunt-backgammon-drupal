@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Block Attributes module.
+ */
+
+use Drupal\block_attributes\BlockAttributesChecker;
+
+/**
+ * Removes stored attribute names that are not valid attribute names.
+ */
+function block_attributes_update_10201() {
+  $config_factory = \Drupal::configFactory();
+  $removed = [];
+
+  // The list of available attributes.
+  $config = $config_factory->getEditable('block_attributes.config');
+  $attributes = $config->get('attributes');
+  if (is_array($attributes)) {
+    $allowed = array_filter($attributes, [BlockAttributesChecker::class, 'isAttributeAllowed'], ARRAY_FILTER_USE_KEY);
+    if (count($allowed) !== count($attributes)) {
+      $removed += array_diff_key($attributes, $allowed);
+      $config->set('attributes', $allowed)->save();
+    }
+  }
+
+  // The values stored on the individual blocks, which are what actually gets
+  // rendered.
+  foreach ($config_factory->listAll('block.block.') as $name) {
+    $block = $config_factory->getEditable($name);
+    $attributes = $block->get('settings.attributes');
+    if (!is_array($attributes)) {
+      continue;
+    }
+    $allowed = array_filter($attributes, [BlockAttributesChecker::class, 'isAttributeAllowed'], ARRAY_FILTER_USE_KEY);
+    if (count($allowed) !== count($attributes)) {
+      $removed += array_diff_key($attributes, $allowed);
+      $block->set('settings.attributes', $allowed)->save();
+    }
+  }
+
+  if ($removed) {
+    return t('Removed the following invalid attribute names: %names. Export your configuration again to keep it in sync.', [
+      '%names' => implode(', ', array_keys($removed)),
+    ]);
+  }
+
+  return t('No invalid attribute names were stored.');
+}

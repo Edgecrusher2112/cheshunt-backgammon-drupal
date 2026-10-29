@@ -1,0 +1,23 @@
+uuid: 53e21e1b-6f11-4137-ac13-e58f49707aa7
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bk_round
+    - node.type.backgammon_match
+id: node.backgammon_match.field_bk_round
+field_name: field_bk_round
+entity_type: node
+bundle: backgammon_match
+label: 'Knockout Round'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

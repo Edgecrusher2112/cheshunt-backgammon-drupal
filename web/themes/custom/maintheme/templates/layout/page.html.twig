@@ -1,0 +1,11 @@
+{# Default page shell. Shared partials can embed menus, blocks and views with Twig Tweak. #}
+{% include '@maintheme/includes/header.html.twig' %}
+
+<main role="main" class="{{ b5_top_container|default('container') }} py-4">
+  <a id="main-content" tabindex="-1"></a>
+  {{ page.messages }}
+  {{ page.page_title }}
+  {{ page.content }}
+</main>
+
+{% include '@maintheme/includes/footer.html.twig' %}

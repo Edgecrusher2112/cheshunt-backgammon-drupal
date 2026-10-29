@@ -1,0 +1,345 @@
+// Main theme.
+@import 'variables_drupal';
+
+// Bootstrap overridden variables.
+// @see https://getbootstrap.com/docs/5.2/customize/sass/#variable-defaults.
+@import 'variables_bootstrap';
+
+// Include bootstrap.
+@import '../../../../themes/contrib/bootstrap5/scss/style';
+@import 'navigation';
+
+// Bootstrap's mobile local tasks otherwise retain fixed light-mode colours.
+@include media-breakpoint-down(md) {
+  .tabs-wrapper {
+    .nav-tabs,
+    .nav-item {
+      border-color: var(--bs-border-color);
+    }
+
+    .nav-item.active {
+      background-color: var(--bs-tertiary-bg);
+    }
+
+    .nav-link.active,
+    .tab-toggle {
+      color: var(--bs-body-color);
+    }
+
+    &:not(.is-collapsible) .nav-item:not(:first-of-type),
+    &.is-collapsible .is-open .nav-item:not(.active) {
+      border-top-color: var(--bs-border-color);
+    }
+  }
+}
+
+// The page container already supplies the required horizontal gutter.
+.region-content {
+  padding: 0;
+}
+
+// Keep editable Bootstrap controls visually distinct from the page background.
+.form-control,
+.form-select {
+  --bs-body-bg: #{$input-bg};
+}
+
+// A fixture occupies two player rows; stripe both rows as a single item.
+.two-line-fixtures {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.two-line-fixtures > tbody > tr.fixture-pair--striped > * {
+  --bs-table-color-type: var(--bs-table-striped-color);
+  --bs-table-bg-type: var(--bs-table-striped-bg);
+}
+
+// Keep native Drupal fixture actions compact and aligned inside their cell.
+.two-line-fixtures td.text-end > .dropbutton-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.two-line-fixtures td.text-end > .dropbutton-wrapper.dropbutton-multiple {
+  margin-right: 0;
+  padding-right: 0;
+}
+
+.js .two-line-fixtures td.text-end > .dropbutton-multiple .dropbutton-widget {
+  position: relative;
+}
+
+.two-line-fixtures .dropbutton-widget .dropbutton .dropbutton-action > * {
+  padding: .25rem .5rem;
+  font-size: .875rem;
+}
+
+// The result fields stack on phones, so Drupal's form-item margins are not
+// needed in addition to the Bootstrap grid spacing.
+@include media-breakpoint-down(md) {
+  .backgammon-match-result-form .form-item {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+// Compact account dropdown shared by every site header.
+.site-account-bar {
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  color: $primary;
+  font-size: 1.15rem;
+
+  &:hover,
+  &:focus {
+    color: $link-hover-color;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $focus-ring-color;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+.theme-toggle__icon--light {
+  display: none;
+}
+
+[data-bs-theme='dark'] {
+  --bs-light-rgb: 14, 14, 21;
+  --bs-dark-rgb: 10, 10, 15;
+
+  .theme-toggle__icon--dark {
+    display: none;
+  }
+
+  .theme-toggle__icon--light {
+    display: inline-block;
+  }
+
+  .form-control,
+  .form-select {
+    --bs-body-bg: #181820;
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+
+    &:focus {
+      color: var(--bs-body-color);
+      background-color: var(--bs-body-bg);
+      border-color: $input-focus-border-color;
+    }
+
+    &::placeholder {
+      color: var(--bs-secondary-color);
+      opacity: 1;
+    }
+
+    &:disabled {
+      color: var(--bs-secondary-color);
+      background-color: var(--bs-secondary-bg);
+    }
+  }
+
+  .card {
+    --bs-card-bg: #{$color-surface-dark};
+    --bs-card-color: #{$color-text-dark};
+    --bs-card-border-color: rgba(240, 240, 255, .14);
+  }
+
+  .table {
+    --bs-table-color: #{$color-text-dark};
+    --bs-table-border-color: #292934;
+    --bs-table-striped-color: #{$color-text-dark};
+    --bs-table-striped-bg: rgba(240, 240, 255, .045);
+    --bs-table-active-color: #{$color-text-dark};
+    --bs-table-active-bg: rgba(240, 240, 255, .1);
+    --bs-table-hover-color: #{$color-text-dark};
+    --bs-table-hover-bg: rgba(255, 45, 120, .1);
+  }
+
+  .dropdown-menu {
+    --bs-dropdown-bg: #{$color-surface-dark};
+    --bs-dropdown-color: #{$color-text-dark};
+    --bs-dropdown-border-color: rgba(240, 240, 255, .14);
+    --bs-dropdown-link-color: #{$color-text-dark};
+    --bs-dropdown-link-hover-color: #{$color-text-dark};
+    --bs-dropdown-link-hover-bg: #1b1b25;
+  }
+}
+
+.site-login-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: $primary;
+
+  &:focus-visible {
+    outline: 3px solid $focus-ring-color;
+    outline-offset: 2px;
+  }
+}
+
+.account-dropdown {
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.75rem;
+    padding: 0 .65rem;
+    border: 0;
+    color: $primary;
+    font-size: 1.15rem;
+
+    &:hover,
+    &:focus,
+    &[aria-expanded='true'] {
+      color: $primary;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $focus-ring-color;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+}
+
+.site-header .navbar-toggler {
+  padding: 0;
+  border: 0;
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 3px;
+  }
+}
+
+.site-header .navbar-brand {
+  font-family: $headings-font-family;
+}
+
+.site-logo {
+  flex: 0 0 auto;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-right: .75rem;
+}
+
+.site-brand-text {
+  line-height: 1.15;
+}
+
+@include media-breakpoint-down(sm) {
+  .site-header .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .site-logo {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: .5rem;
+  }
+
+  .site-strapline {
+    font-size: .75rem;
+  }
+}
+
+.site-navigation-offcanvas {
+  --bs-offcanvas-width: min(22rem, 90vw);
+}
+
+.site-navigation-offcanvas .nav-link {
+  padding-block: 1rem;
+  padding-inline: 0;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  font-family: $headings-font-family;
+  font-weight: $font-weight-bold;
+}
+
+.site-strapline {
+  font-family: $font-family-sans-serif;
+  font-size: .875rem;
+  line-height: 1.2;
+}
+
+.home-signup-card {
+  // background:
+  //   linear-gradient(rgba($color-background-dark, .82), rgba($color-surface-dark, .92)),
+  //   url('../assets/home/backgammon-board.webp') center / cover no-repeat;
+
+  .btn-primary {
+    --bs-btn-color: #{$color-background-dark};
+    --bs-btn-hover-color: #{$color-background-dark};
+    --bs-btn-active-color: #{$color-background-dark};
+  }
+}
+
+// Replace the module's round image with a square theme-coloured button.
+body #backtotop {
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: $primary;
+  color: $color-background-dark;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-top: 3px solid currentColor;
+    border-right: 3px solid currentColor;
+    transform: translate(-50%, -25%) rotate(-45deg);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $primary;
+    outline-offset: 3px;
+    opacity: 1;
+  }
+}
+
+.home-back-to-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  width: 45px;
+  height: 45px;
+  z-index: 30;
+  background: $primary;
+  color: $color-background-dark;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-background-dark;
+    background: mix(#fff, $primary, 14%);
+  }
+}

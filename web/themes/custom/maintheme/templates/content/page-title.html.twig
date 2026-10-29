@@ -1,0 +1,6 @@
+{# Theme override for page titles. #}
+{{ title_prefix }}
+{% if not hide_page_title and title|render|striptags|trim %}
+  <h1{{ title_attributes.addClass('mb-3') }}>{{ title }}</h1>
+{% endif %}
+{{ title_suffix }}

@@ -1,0 +1,30 @@
+uuid: cb061b23-2ce8-4dc9-852e-2315b7a7c867
+langcode: en-gb
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:1e4182aa-15bd-4d4b-8b31-204b0cd6cb4f'
+  module:
+    - block_content
+    - system
+  theme:
+    - maintheme
+id: maintheme_contactpagetext
+theme: maintheme
+region: content
+weight: 3
+provider: null
+plugin: 'block_content:1e4182aa-15bd-4d4b-8b31-204b0cd6cb4f'
+settings:
+  id: 'block_content:1e4182aa-15bd-4d4b-8b31-204b0cd6cb4f'
+  label: 'Contact - Page Text'
+  label_display: '0'
+  provider: block_content
+  attributes:
+    class: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /contact

@@ -1,0 +1,13 @@
+.site-header .navbar-toggler-icon {
+  transition: transform .2s ease-in-out;
+}
+
+.site-header .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header .navbar-toggler-icon {
+    transition: none;
+  }
+}

@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Cookieless Matomo analytics for non-local environments.
+ */
+#}
+<script>
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['disableCookies']);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function () {
+    var trackerUrl = 'https://matomo.yoga-herts.co.uk/';
+    _paq.push(['setTrackerUrl', trackerUrl + 'matomo.php']);
+    _paq.push(['setSiteId', '14']);
+    var documentElement = document;
+    var scriptElement = documentElement.createElement('script');
+    var firstScript = documentElement.getElementsByTagName('script')[0];
+    scriptElement.async = true;
+    scriptElement.src = trackerUrl + 'matomo.js';
+    firstScript.parentNode.insertBefore(scriptElement, firstScript);
+  })();
+</script>

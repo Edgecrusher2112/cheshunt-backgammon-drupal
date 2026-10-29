@@ -1,0 +1,180 @@
+uuid: e01991ef-a55f-40ac-9895-c228482f9b1a
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.field.node.backgammon_knockout.field_bk_bracket
+    - field.field.node.backgammon_knockout.field_bk_end
+    - field.field.node.backgammon_knockout.field_bk_players
+    - field.field.node.backgammon_knockout.field_bk_season
+    - field.field.node.backgammon_knockout.field_bk_start
+    - field.field.node.backgammon_knockout.field_bk_status
+    - field.field.node.backgammon_knockout.field_bk_target
+    - field.field.node.backgammon_knockout.field_bk_winner
+    - node.type.backgammon_knockout
+  module:
+    - datetime
+    - field_group
+    - path
+third_party_settings:
+  field_group:
+    group_season:
+      children:
+        - field_bk_season
+        - field_bk_target
+      label: Season
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-2'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_dates:
+      children:
+        - field_bk_start
+        - field_bk_end
+      label: Dates
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-2'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_status:
+      children:
+        - field_bk_status
+      label: Status
+      region: content
+      parent_name: ''
+      weight: 7
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-1'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+id: node.backgammon_knockout.default
+targetEntityType: node
+bundle: backgammon_knockout
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bk_end:
+    type: datetime_default
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bk_players:
+    type: entity_reference_autocomplete
+    weight: 9
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_bk_season:
+    type: number
+    weight: 2
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bk_start:
+    type: datetime_default
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bk_status:
+    type: options_select
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bk_target:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 14
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 13
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 10
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 11
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  field_bk_bracket: true
+  field_bk_winner: true
+  promote: true
+  sticky: true

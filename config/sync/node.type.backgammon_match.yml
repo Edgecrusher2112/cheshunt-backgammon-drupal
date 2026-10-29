@@ -1,0 +1,17 @@
+uuid: ec1b5b7c-de0b-4dad-82ab-88e9fed4cc0a
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Match
+type: backgammon_match
+description: 'A match shared by leagues and knockout competitions.'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

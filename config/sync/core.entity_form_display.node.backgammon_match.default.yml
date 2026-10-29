@@ -1,0 +1,277 @@
+uuid: 9d056c9b-c2ad-4ec8-8c20-c794f1a10c5b
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.field.node.backgammon_match.field_bg_backgammons_1
+    - field.field.node.backgammon_match.field_bg_backgammons_2
+    - field.field.node.backgammon_match.field_bg_gammons_1
+    - field.field.node.backgammon_match.field_bg_gammons_2
+    - field.field.node.backgammon_match.field_bg_player_1
+    - field.field.node.backgammon_match.field_bg_player_2
+    - field.field.node.backgammon_match.field_bg_score_1
+    - field.field.node.backgammon_match.field_bg_score_2
+    - field.field.node.backgammon_match.field_bg_target
+    - field.field.node.backgammon_match.field_bk_round
+    - field.field.node.backgammon_match.field_bk_slot
+    - field.field.node.backgammon_match.field_bk_tournament
+    - field.field.node.backgammon_match.field_bl_season_ref
+    - node.type.backgammon_match
+  module:
+    - field_group
+    - path
+third_party_settings:
+  field_group:
+    group_league_knockout:
+      children:
+        - field_bl_season_ref
+        - field_bk_tournament
+        - field_bg_target
+      label: League/Knockout
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-3'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_player_1:
+      children:
+        - field_bg_player_1
+        - field_bg_score_1
+      label: 'P1 Name/Score'
+      region: content
+      parent_name: ''
+      weight: 2
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-2'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_player_2:
+      children:
+        - field_bg_player_2
+        - field_bg_score_2
+      label: 'P2 Name/Score'
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-2'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_player_1_extras:
+      children:
+        - field_bg_gammons_1
+        - field_bg_backgammons_1
+      label: 'P1 Extras'
+      region: content
+      parent_name: ''
+      weight: 3
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-2'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_p2_extras:
+      children:
+        - field_bg_gammons_2
+        - field_bg_backgammons_2
+      label: 'P2 Extras'
+      region: content
+      parent_name: ''
+      weight: 5
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-2'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+id: node.backgammon_match.default
+targetEntityType: node
+bundle: backgammon_match
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bg_backgammons_1:
+    type: number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bg_backgammons_2:
+    type: number
+    weight: 7
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bg_gammons_1:
+    type: number
+    weight: 5
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bg_gammons_2:
+    type: number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bg_player_1:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_bg_player_2:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_bg_score_1:
+    type: number
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bg_score_2:
+    type: number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bg_target:
+    type: options_select
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bk_tournament:
+    type: entity_reference_autocomplete
+    weight: 7
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_bl_season_ref:
+    type: entity_reference_autocomplete
+    weight: 6
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 12
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 8
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 10
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  field_bk_round: true
+  field_bk_slot: true
+  promote: true
+  sticky: true

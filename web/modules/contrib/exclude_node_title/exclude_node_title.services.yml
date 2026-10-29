@@ -1,0 +1,11 @@
+services:
+  exclude_node_title.manager:
+    class: Drupal\exclude_node_title\ExcludeNodeTitleManager
+    autowire: true
+
+  Drupal\exclude_node_title\ExcludeNodeTitleManagerInterface:
+    alias: exclude_node_title.manager
+
+  Drupal\exclude_node_title\Hook\ExcludeNodeTitleHooks:
+    class: Drupal\exclude_node_title\Hook\ExcludeNodeTitleHooks
+    autowire: true

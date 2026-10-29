@@ -1,0 +1,4 @@
+services:
+  backgammon_league.seasons:
+    class: Drupal\backgammon_league\Service\Seasons
+    arguments: ['@entity_type.manager', '@lock', '@database', '@current_user', '@backgammon_matches.results']

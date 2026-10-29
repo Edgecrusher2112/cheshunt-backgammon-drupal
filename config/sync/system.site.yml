@@ -1,0 +1,15 @@
+_core:
+  default_config_hash: ijfbzDTN4CbE7Sr-6ubWzy_t1vH4OtU1doNCLssVz-4
+langcode: en-gb
+uuid: c02c822a-ab73-44dc-9020-a44c3b9f7eb8
+name: 'Cheshunt Backgammon'
+mail: info@cheshuntbackgammon.club
+slogan: 'Backgammon In East Herts'
+page:
+  403: ''
+  404: ''
+  front: /home
+admin_compact_mode: false
+weight_select_max: 100
+default_langcode: en-gb
+mail_notification: null

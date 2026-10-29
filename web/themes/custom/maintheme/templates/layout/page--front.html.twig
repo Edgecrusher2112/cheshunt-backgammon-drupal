@@ -1,0 +1,41 @@
+<a id="top"></a>
+{% include '@maintheme/includes/header.html.twig' %}
+
+<main role="main" class="{{ b5_top_container|default('container') }} py-4">
+
+  <a id="main-content" tabindex="-1"></a>
+
+  {{ page.content }}
+
+  {# Render once so the View's cache metadata is retained even when empty. #}
+  {% set main_news = drupal_block('views_block:frontpage_latest_news-block', {label_display: false})|render %}
+  {% set has_main_news = main_news|striptags|trim is not empty %}
+
+  <div class="row region region-content my-5">
+
+    {# Start main news block #}
+    {% if has_main_news %}
+      <div class="col-md-6 mb-4 mb-md-0">
+        {% include 'maintheme:basic-card' with {
+          content: main_news
+        } only %}
+      </div>
+    {% endif %}
+    {# End main news block #}
+
+
+    {# Start newsletter sign up block #}
+      <div class="{{ has_main_news ? 'col-md-6' : 'col-12' }}">
+        {% include 'maintheme:basic-card' with {
+          title: 'Get Club Updates'|t,
+          header_classes: 'bg-primary',
+          content: include('@maintheme/includes/newsletter-signup.html.twig', {}, with_context = false)
+        } only %}
+      </div>
+    {# End newsletter sign up block #}
+
+  </div>
+
+</main>
+
+{% include '@maintheme/includes/footer.html.twig' %}

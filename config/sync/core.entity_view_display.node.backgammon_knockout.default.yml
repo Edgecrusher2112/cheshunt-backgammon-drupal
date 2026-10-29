@@ -1,0 +1,71 @@
+uuid: f248697f-8531-490e-8c49-390e08733c3f
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.field.node.backgammon_knockout.field_bk_bracket
+    - field.field.node.backgammon_knockout.field_bk_end
+    - field.field.node.backgammon_knockout.field_bk_players
+    - field.field.node.backgammon_knockout.field_bk_season
+    - field.field.node.backgammon_knockout.field_bk_start
+    - field.field.node.backgammon_knockout.field_bk_status
+    - field.field.node.backgammon_knockout.field_bk_target
+    - field.field.node.backgammon_knockout.field_bk_winner
+    - node.type.backgammon_knockout
+  module:
+    - options
+    - user
+id: node.backgammon_knockout.default
+targetEntityType: node
+bundle: backgammon_knockout
+mode: default
+content:
+  field_bk_players:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  field_bk_season:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  field_bk_status:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  field_bk_target:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  field_bk_winner:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_bk_bracket: true
+  field_bk_end: true
+  field_bk_start: true
+  langcode: true

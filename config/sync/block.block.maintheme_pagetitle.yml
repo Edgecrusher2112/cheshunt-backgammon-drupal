@@ -1,0 +1,26 @@
+uuid: 548a91dd-b2f4-462e-b21a-cb31a765470d
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - maintheme
+id: maintheme_pagetitle
+theme: maintheme
+region: content
+weight: 1
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+  attributes:
+    class: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/user/*'

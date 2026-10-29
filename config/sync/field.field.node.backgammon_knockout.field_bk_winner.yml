@@ -1,0 +1,29 @@
+uuid: d69c829e-970b-4937-aa45-6a7a26a59e13
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bk_winner
+    - node.type.backgammon_knockout
+id: node.backgammon_knockout.field_bk_winner
+field_name: field_bk_winner
+entity_type: node
+bundle: backgammon_knockout
+label: 'Tournament Winner'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: _none
+    include_anonymous: true
+field_type: entity_reference

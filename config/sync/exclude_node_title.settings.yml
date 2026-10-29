@@ -1,0 +1,19 @@
+_core:
+  default_config_hash: a_EXRfXokVSU2tHLT-BsxRL-gAyOAydZrqejaIQMWu4
+translation_sync: true
+search: false
+type: hidden
+content_types:
+  page: user
+  backgammon_knockout: none
+  backgammon_match: all
+  backgammon_season: none
+  news: none
+content_type_modes:
+  page:
+    - full
+  backgammon_knockout: {  }
+  backgammon_match:
+    - full
+  backgammon_season: {  }
+  news: {  }

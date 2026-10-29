@@ -1,0 +1,8 @@
+name: Backgammon Knockout
+type: module
+description: Random knockout draws, byes and automatic winner advancement.
+package: Backgammon
+core_version_requirement: ^11
+dependencies:
+  - backgammon_matches:backgammon_matches
+  - drupal:views

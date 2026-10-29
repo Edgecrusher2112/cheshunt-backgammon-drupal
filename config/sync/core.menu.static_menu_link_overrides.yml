@@ -1,0 +1,39 @@
+_core:
+  default_config_hash: jdY7AU0tU-QsjmiOw3W8vwpYMb-By--_MSFgbqKUTYM
+definitions:
+  'admin_toolbar_tools__extra_links:node__add__backgammon_knockout':
+    menu_name: admin
+    parent: 'admin_toolbar_tools.extra_links:node.add'
+    weight: 2
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:node__add__backgammon_season':
+    menu_name: admin
+    parent: 'admin_toolbar_tools.extra_links:node.add'
+    weight: 1
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:node__add__page':
+    menu_name: admin
+    parent: 'admin_toolbar_tools.extra_links:node.add'
+    weight: 3
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:entity__node_type__edit_form__backgammon_knockout':
+    menu_name: admin
+    parent: entity.node_type.collection
+    weight: 1
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:entity__node_type__edit_form__backgammon_match':
+    menu_name: admin
+    parent: entity.node_type.collection
+    weight: -1
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:entity__node_type__edit_form__page':
+    menu_name: admin
+    parent: entity.node_type.collection
+    weight: 2
+    expanded: false
+    enabled: true

@@ -1,0 +1,14 @@
+{
+    "name": "drupal/stable9",
+    "description": "A base theme using Drupal 9.0.0's core markup and CSS.",
+    "type": "drupal-theme",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://drupal.org/project/stable9",
+    "support": {
+        "issues": "https://drupal.org/project/issues/stable9",
+        "source": "https://git.drupalcode.org/project/stable9"
+    },
+    "require": {
+        "drupal/core": "^11.3 || ^12"
+    }
+}

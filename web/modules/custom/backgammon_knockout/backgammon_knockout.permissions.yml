@@ -1,0 +1,4 @@
+administer backgammon knockouts:
+  title: Administer backgammon knockouts
+  description: Create tournaments and generate random draws.
+  restrict access: true

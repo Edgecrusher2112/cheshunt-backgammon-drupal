@@ -1,0 +1,11 @@
+// Build Bootstrap's root-level CSS variables outside the CKEditor wrapper.
+@import 'variables_bootstrap';
+@import 'variables_drupal';
+
+// Include the Bootstrap 5 root variables using this subtheme's overrides.
+@import '../../../../themes/contrib/bootstrap5/dist/bootstrap/5.3.8/scss/functions';
+@import '../../../../themes/contrib/bootstrap5/dist/bootstrap/5.3.8/scss/variables';
+@import '../../../../themes/contrib/bootstrap5/dist/bootstrap/5.3.8/scss/variables-dark';
+@import '../../../../themes/contrib/bootstrap5/dist/bootstrap/5.3.8/scss/maps';
+@import '../../../../themes/contrib/bootstrap5/dist/bootstrap/5.3.8/scss/mixins';
+@import '../../../../themes/contrib/bootstrap5/dist/bootstrap/5.3.8/scss/root';

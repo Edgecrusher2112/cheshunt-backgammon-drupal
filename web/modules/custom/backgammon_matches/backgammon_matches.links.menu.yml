@@ -1,0 +1,6 @@
+backgammon_matches.my_fixtures:
+  title: My Fixtures
+  description: View your matches and enter outstanding results.
+  route_name: backgammon_matches.my_fixtures
+  menu_name: account
+  weight: 5

@@ -1,0 +1,20 @@
+uuid: 6e915ee8-5c74-44ef-9135-deaa50870e2e
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_bg_score_2
+field_name: field_bg_score_2
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

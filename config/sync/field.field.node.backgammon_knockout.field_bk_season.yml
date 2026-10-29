@@ -1,0 +1,23 @@
+uuid: 1d7d39ee-4e9e-49ad-a1be-6c2910bd02e3
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bk_season
+    - node.type.backgammon_knockout
+id: node.backgammon_knockout.field_bk_season
+field_name: field_bk_season
+entity_type: node
+bundle: backgammon_knockout
+label: Season
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

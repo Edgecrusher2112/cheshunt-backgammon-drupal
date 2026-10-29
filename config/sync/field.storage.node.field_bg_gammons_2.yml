@@ -1,0 +1,20 @@
+uuid: 5a669a96-42de-4d3d-9a68-4421f16f3f06
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_bg_gammons_2
+field_name: field_bg_gammons_2
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

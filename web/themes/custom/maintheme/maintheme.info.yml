@@ -1,0 +1,18 @@
+name: 'Main Theme'
+type: theme
+description: 'Main Theme subtheme based on Bootstrap 5 theme.'
+screenshot: screenshot.png
+core_version_requirement: '^10.1 || ^11.0'
+'base theme': bootstrap5
+libraries:
+  - maintheme/theme-init
+  - maintheme/global-styling
+ckeditor_stylesheets:
+  - css/style.css
+ckeditor5-stylesheets:
+  - 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap'
+  - css/ck5style.css
+regions:
+  content: 'Main content'
+libraries-override:
+  bootstrap5/global-styling: false

@@ -1,0 +1,21 @@
+uuid: dcf14f86-135e-4a65-a57a-4fc5b6d5ba5a
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bl_target
+    - node.type.backgammon_season
+  module:
+    - options
+id: node.backgammon_season.field_bl_target
+field_name: field_bl_target
+entity_type: node
+bundle: backgammon_season
+label: Length
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

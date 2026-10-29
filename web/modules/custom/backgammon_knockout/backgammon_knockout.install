@@ -1,0 +1,152 @@
+<?php
+
+/**
+ * @file
+ * Creates retained tournament records and Views-compatible match relationships.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\Entity\NodeType;
+use Drupal\user\Entity\Role;
+
+/** Implements hook_install(). */
+function backgammon_knockout_install() {
+  if (!NodeType::load('backgammon_knockout')) {
+    NodeType::create(['type' => 'backgammon_knockout', 'name' => 'Knockout', 'new_revision' => TRUE, 'display_submitted' => FALSE])->save();
+  }
+  Role::load('league_admin')?->grantPermission('administer backgammon knockouts')->save();
+  $players = ['handler' => 'default:user', 'handler_settings' => ['filter' => ['type' => 'role', 'role' => ['league_player' => 'league_player']]]];
+  $fields = [
+    'field_bk_season' => ['Season number', 'integer', [], ['min' => 1], 'number', 'number_integer'],
+    'field_bk_start' => ['Start date', 'datetime', ['datetime_type' => 'date'], [], 'datetime_default', NULL],
+    'field_bk_end' => ['End date', 'datetime', ['datetime_type' => 'date'], [], 'datetime_default', NULL],
+    'field_bk_target' => ['Match target', 'list_integer', ['allowed_values' => [3 => '3', 5 => '5', 7 => '7', 9 => '9', 11 => '11', 13 => '13', 15 => '15']], [], 'options_select', 'list_default'],
+    'field_bk_status' => ['Tournament status', 'list_string', ['allowed_values' => ['active' => 'Active', 'completed' => 'Completed']], [], 'options_select', 'list_default'],
+    'field_bk_players' => ['Tournament players', 'entity_reference', ['target_type' => 'user'], $players, 'entity_reference_autocomplete', 'entity_reference_label'],
+    'field_bk_bracket' => ['Stored bracket', 'string_long', [], [], NULL, NULL],
+    'field_bk_winner' => ['Tournament winner', 'entity_reference', ['target_type' => 'user'], ['handler' => 'default:user'], NULL, 'entity_reference_label'],
+    'field_bk_tournament' => ['Knockout tournament', 'entity_reference', ['target_type' => 'node'], ['handler' => 'default:node', 'handler_settings' => ['target_bundles' => ['backgammon_knockout' => 'backgammon_knockout']]], 'entity_reference_autocomplete', 'entity_reference_label'],
+    'field_bk_round' => ['Knockout round', 'integer', [], ['min' => 1], 'number', 'number_integer'],
+    'field_bk_slot' => ['Bracket position', 'integer', [], ['min' => 1], 'number', 'number_integer'],
+  ];
+  foreach ($fields as $name => [$label, $type, $storage, $settings, $widget, $formatter]) {
+    $bundle = in_array($name, ['field_bk_tournament', 'field_bk_round', 'field_bk_slot']) ? 'backgammon_match' : 'backgammon_knockout';
+    if (!FieldStorageConfig::loadByName('node', $name)) {
+      FieldStorageConfig::create(['field_name' => $name, 'entity_type' => 'node', 'type' => $type, 'settings' => $storage, 'cardinality' => $name === 'field_bk_players' ? -1 : 1])->save();
+    }
+    if (!FieldConfig::loadByName('node', $bundle, $name)) {
+      FieldConfig::create([
+        'field_name' => $name,
+        'entity_type' => 'node',
+        'bundle' => $bundle,
+        'label' => $label,
+        'settings' => $settings,
+        'required' => in_array($name, ['field_bk_season', 'field_bk_start', 'field_bk_end', 'field_bk_target', 'field_bk_status', 'field_bk_players']),
+        'default_value' => $name === 'field_bk_status' ? [['value' => 'active']] : [],
+      ])->save();
+    }
+    $repo = \Drupal::service('entity_display.repository');
+    $form = $repo->getFormDisplay('node', $bundle);
+    $view = $repo->getViewDisplay('node', $bundle);
+    $widget ? $form->setComponent($name, ['type' => $widget, 'weight' => 30]) : $form->removeComponent($name);
+    $formatter ? $view->setComponent($name, ['type' => $formatter, 'label' => 'above', 'weight' => 30]) : $view->removeComponent($name);
+    $form->save();
+    $view->save();
+  }
+  \Drupal::service('entity_display.repository')->getFormDisplay('node', 'backgammon_knockout')->setComponent('title', ['type' => 'string_textfield', 'weight' => -10])->save();
+}
+
+/**
+ * Adds the extended odd-numbered match targets.
+ */
+function backgammon_knockout_update_11003(): void {
+  $storage = FieldStorageConfig::loadByName('node', 'field_bk_target');
+  if ($storage) {
+    $storage->setSetting('allowed_values', [3 => '3', 5 => '5', 7 => '7', 9 => '9', 11 => '11', 13 => '13', 15 => '15']);
+    $storage->save();
+  }
+}
+
+/**
+ * Adds an Active/Completed status to existing knockout tournaments.
+ */
+function backgammon_knockout_update_11001(): void {
+  if (!FieldStorageConfig::loadByName('node', 'field_bk_status')) {
+    FieldStorageConfig::create([
+      'field_name' => 'field_bk_status',
+      'entity_type' => 'node',
+      'type' => 'list_string',
+      'settings' => ['allowed_values' => ['active' => 'Active', 'completed' => 'Completed']],
+      'cardinality' => 1,
+    ])->save();
+  }
+  if (!FieldConfig::loadByName('node', 'backgammon_knockout', 'field_bk_status')) {
+    FieldConfig::create([
+      'field_name' => 'field_bk_status',
+      'entity_type' => 'node',
+      'bundle' => 'backgammon_knockout',
+      'label' => 'Tournament status',
+      'required' => TRUE,
+      'default_value' => [['value' => 'active']],
+    ])->save();
+  }
+
+  $repository = \Drupal::service('entity_display.repository');
+  $repository->getFormDisplay('node', 'backgammon_knockout')
+    ->setComponent('field_bk_status', ['type' => 'options_select', 'weight' => 30])
+    ->save();
+  $repository->getViewDisplay('node', 'backgammon_knockout')
+    ->setComponent('field_bk_status', ['type' => 'list_default', 'label' => 'above', 'weight' => 30])
+    ->save();
+
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $ids = $storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'backgammon_knockout')
+    ->execute();
+  foreach ($storage->loadMultiple($ids) as $tournament) {
+    if ($tournament->get('field_bk_status')->isEmpty()) {
+      $tournament->set('field_bk_status', 'active')->save();
+    }
+  }
+}
+
+/**
+ * Adds historical start and end dates to knockout tournaments.
+ */
+function backgammon_knockout_update_11002(): void {
+  $fields = [
+    'field_bk_start' => ['Start date', 'd36ad9e1-813b-4a13-8274-d490f8a50308', 'b63fdac6-b377-43f8-a1fd-938eaa764dcb'],
+    'field_bk_end' => ['End date', '39cd8435-dbdc-4d87-b1e6-e7f4ed3af7b0', '9775b42d-7904-4812-ad81-dbd09af74659'],
+  ];
+  $repository = \Drupal::service('entity_display.repository');
+  foreach ($fields as $field_name => [$label, $storage_uuid, $field_uuid]) {
+    if (!FieldStorageConfig::loadByName('node', $field_name)) {
+      FieldStorageConfig::create([
+        'uuid' => $storage_uuid,
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'type' => 'datetime',
+        'settings' => ['datetime_type' => 'date'],
+        'cardinality' => 1,
+      ])->save();
+    }
+    if (!FieldConfig::loadByName('node', 'backgammon_knockout', $field_name)) {
+      FieldConfig::create([
+        'uuid' => $field_uuid,
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'bundle' => 'backgammon_knockout',
+        'label' => $label,
+        'required' => TRUE,
+      ])->save();
+    }
+    $repository->getFormDisplay('node', 'backgammon_knockout')
+      ->setComponent($field_name, ['type' => 'datetime_default', 'weight' => 20])
+      ->save();
+    $repository->getViewDisplay('node', 'backgammon_knockout')
+      ->removeComponent($field_name)
+      ->save();
+  }
+}

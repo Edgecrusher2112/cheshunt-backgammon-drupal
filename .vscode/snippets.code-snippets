@@ -1,0 +1,100 @@
+{
+  "Basic Card": {
+    "prefix": "snip-basic-card",
+    "body": [
+      "{% include 'maintheme:basic-card' with {",
+      "  title: '$1'|t,",
+      "  header_classes: '${2:bg-primary text-white}',",
+      "  margin: '${3|mb-4,mb-1,mb-2,mb-3,mb-5|}',",
+      "  padding: '${4|p-4,p-1,p-2,p-3,p-5|}',",
+      "  content: $5",
+      "} only %}$0",
+    ],
+    "description": "Basic Card",
+  },
+  "Drupal Block": {
+    "prefix": "snip-drupal-block",
+    "body": ["{{ drupal_block('block_content:$1') }}$0"],
+    "description": "Drupal Block",
+  },
+  "Card Embed": {
+    "prefix": "snip-card",
+    "body": [
+      "{% embed '@maintheme/templates/components/card.html.twig'",
+      "	with {",
+      "		title: '$1',",
+      "		help: '$2',",
+      "		body: '$3',",
+      "	}",
+      "%}",
+      "{% endembed %}",
+    ],
+  },
+  "Card Embed": {
+    "prefix": "snip-card",
+    "body": [
+      "{% embed '@maintheme/templates/components/card.html.twig'",
+      "	with {",
+      "		title: '$1',",
+      "		help: '$2',",
+      "		body: '$3',",
+      "	}",
+      "%}",
+      "{% endembed %}",
+    ],
+    "description": "Generic Site Card",
+    "include": ["**/*.html.twig"],
+  },
+  "Tooltip Help Macro": {
+    "prefix": "snip-tooltip",
+    "body": [
+      "{% import '@maintheme/templates/macros/help-tooltip.html.twig' as helpTooltip %}",
+      "{{ helpTooltip.help(help) }}",
+    ],
+    "description": "Tooltip Help",
+    "include": ["**/*.html.twig"],
+  },
+  "Team Badge Macro": {
+    "prefix": "snip-team-badge",
+    "body": [
+      "{% import '@maintheme/templates/macros/team-badge.html.twig' as badge %}",
+      "{{ badge.badge(badge_path, badge, 24, 24, 'mx-2', team) }}",
+    ],
+    "description": "Team Badge Macro",
+    "include": ["**/*.html.twig"],
+  },
+  "Module Comment": {
+    "prefix": "snip-comment-module",
+    "body": [
+      "// -------------------------------------------------------------------------",
+      "// $1.",
+      "// -------------------------------------------------------------------------",
+    ],
+    "description": "Module Comment",
+  },
+  "YML Comment": {
+    "prefix": "snip-comment-yml",
+    "body": [
+      "# ---------------------------------------------------------------------------",
+      "# $1.",
+      "# ---------------------------------------------------------------------------",
+    ],
+    "description": "YML Comment",
+  },
+  "Loop Through View Fields": {
+    "prefix": "snip-debugging-views-fields",
+    "body": [
+      "<ul>",
+      "  {% for key, field in fields %}",
+      "    <li>{{ key }}</li>",
+      "  {% endfor %}",
+      "</ul>",
+    ],
+    "description": "Loop Through View Fields",
+  },
+  "Dump Field": {
+    "prefix": "snip-debugging-dump-field",
+    "body": ["{{ dump($1) }}"],
+    "description": "Dump Field",
+  },
+}

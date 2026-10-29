@@ -1,0 +1,37 @@
+<p class="small">Venue and meeting dates are being decided.</p>
+<form class="needs-validation" method="post" action="https://lists.cheshuntbackgammon.club/?p=subscribe&amp;id=1" name="subscribeform">
+  <input type="hidden" name="formtoken" value="162fa0f73677ad0100cb620939936a3a">
+  <div class="row mb-3">
+    <div class="col">
+      {# <label class="form-label" for="attribute1">{{ 'First name'|t }}</label> #}
+      <input class="form-control form-control-sm bg-light-subtle" type="text" name="attribute1" value="" id="attribute1" placeholder="{{ 'First name'|t }}" required>
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Required!</div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      {# <label class="form-label" for="attribute2">{{ 'Last name'|t }}</label> #}
+      <input class="form-control form-control-sm bg-light-subtle" type="text" name="attribute2" value="" id="attribute2" placeholder="{{ 'Last name'|t }}" required>
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Required!</div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-12">
+      {# <label class="form-label" for="email">{{ 'Email address'|t }}</label> #}
+      <input class="form-control form-control-sm bg-light-subtle" type="email" name="email" placeholder="{{ 'Email address'|t }}" id="email" required>
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Required!</div>
+      <input type="hidden" name="htmlemail" value="1">
+    </div>
+  </div>
+  <input type="hidden" name="list[2]" value="signup">
+  <input type="hidden" name="listname[2]" value="Main Newsletter">
+  <div class="d-none" aria-hidden="true">
+    <input type="text" name="VerificationCodeX" tabindex="-1" autocomplete="off" value="" size="20" class="form-control">
+  </div>
+  <div class="d-grid">
+    <button class="btn btn-primary btn-sm" type="submit" name="subscribe">Keep me updated</button>
+  </div>
+</form>

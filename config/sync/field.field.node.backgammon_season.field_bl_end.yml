@@ -1,0 +1,21 @@
+uuid: d83e491b-ebb4-43be-9dea-4d7c06a73cd7
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bl_end
+    - node.type.backgammon_season
+  module:
+    - datetime
+id: node.backgammon_season.field_bl_end
+field_name: field_bl_end
+entity_type: node
+bundle: backgammon_season
+label: 'End Date'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

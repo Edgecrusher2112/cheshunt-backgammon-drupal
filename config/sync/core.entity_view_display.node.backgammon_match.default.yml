@@ -1,0 +1,145 @@
+uuid: 9b81b809-cbc9-4646-9a52-95d6a502e350
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.field.node.backgammon_match.field_bg_backgammons_1
+    - field.field.node.backgammon_match.field_bg_backgammons_2
+    - field.field.node.backgammon_match.field_bg_gammons_1
+    - field.field.node.backgammon_match.field_bg_gammons_2
+    - field.field.node.backgammon_match.field_bg_player_1
+    - field.field.node.backgammon_match.field_bg_player_2
+    - field.field.node.backgammon_match.field_bg_score_1
+    - field.field.node.backgammon_match.field_bg_score_2
+    - field.field.node.backgammon_match.field_bg_target
+    - field.field.node.backgammon_match.field_bk_round
+    - field.field.node.backgammon_match.field_bk_slot
+    - field.field.node.backgammon_match.field_bk_tournament
+    - field.field.node.backgammon_match.field_bl_season_ref
+    - node.type.backgammon_match
+  module:
+    - options
+    - user
+id: node.backgammon_match.default
+targetEntityType: node
+bundle: backgammon_match
+mode: default
+content:
+  field_bg_backgammons_1:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_bg_backgammons_2:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_bg_gammons_1:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_bg_gammons_2:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_bg_player_1:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_bg_player_2:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_bg_score_1:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_bg_score_2:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_bg_target:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_bk_round:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  field_bk_slot:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  field_bk_tournament:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  field_bl_season_ref:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 28
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  langcode: true

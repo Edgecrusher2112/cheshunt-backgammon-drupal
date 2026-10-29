@@ -1,0 +1,22 @@
+uuid: 0374249d-cff6-4f2e-a408-d8846687c2e5
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - maintheme
+_core:
+  default_config_hash: Ip05PdoQucncfDKYUawDjdn6HfK6HXd4B-zXPOmV6-8
+id: maintheme_messages
+theme: maintheme
+region: content
+weight: -3
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: Messages
+  label_display: '0'
+  provider: system
+visibility: {  }

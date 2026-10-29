@@ -1,0 +1,14 @@
+uuid: db85fbf1-9bc7-49c5-96f6-14c4c893e46d
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - user.role.league_player
+  module:
+    - user
+id: user_add_role_action.league_player
+label: 'Add the League Player role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: league_player

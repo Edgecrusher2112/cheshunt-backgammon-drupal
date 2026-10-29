@@ -1,0 +1,20 @@
+backgammon_matches.my_fixtures:
+  path: '/my-fixtures'
+  defaults:
+    _controller: '\Drupal\backgammon_matches\Controller\MyFixturesController::build'
+    _title: 'My Fixtures'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _permission: 'enter backgammon results'
+
+backgammon_matches.result:
+  path: '/node/{node}/result'
+  defaults:
+    _form: '\Drupal\backgammon_matches\Form\MatchResultForm'
+    _title: 'Enter Match Result'
+  requirements:
+    _custom_access: '\Drupal\backgammon_matches\Form\MatchResultForm::access'
+  options:
+    parameters:
+      node:
+        type: entity:node

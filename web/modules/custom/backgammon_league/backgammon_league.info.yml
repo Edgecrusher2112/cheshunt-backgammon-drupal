@@ -1,0 +1,9 @@
+name: Backgammon League
+type: module
+description: Season participants, round-robin fixtures and historical standings.
+package: Backgammon
+core_version_requirement: ^11
+dependencies:
+  - backgammon_matches:backgammon_matches
+  - drupal:datetime
+  - drupal:views

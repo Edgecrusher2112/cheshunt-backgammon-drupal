@@ -1,0 +1,5 @@
+name: Admin tweaks
+type: module
+description: Admin UI layout tweaks (attendee paragraph columns)
+core_version_requirement: ^10 || ^11
+package: Custom

@@ -1,0 +1,142 @@
+<?php
+
+/**
+ * @file
+ * Functions to support block attributes.
+ */
+
+use Drupal\block_attributes\BlockAttributesChecker;
+use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\Component\Utility\Unicode;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function block_attributes_form_block_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $block = $form_state->getFormObject()->getEntity()->getPlugin();
+  $config = $block->getConfiguration();
+  $attributes = \Drupal::config('block_attributes.config')->get('attributes') ?: [];
+
+  // Names that would break out of the attribute when rendered are skipped,
+  // so offering a field for one would only collect a value that never reaches
+  // the markup. Filtering here rather than inside the loop below keeps
+  // the "no attributes defined" case correct when every stored name is invalid.
+  $attributes = array_filter($attributes, [BlockAttributesChecker::class, 'isAttributeAllowed'], ARRAY_FILTER_USE_KEY);
+
+  $form['settings']['attributes'] = [
+    '#type' => 'details',
+    '#title' => t('Attributes'),
+    '#tree' => TRUE,
+  ];
+
+  $config_path = Url::fromRoute('block_attributes.config')->toString();
+  $referrer_path = parse_url(\Drupal::request()->headers->get('referer'))['path'];
+  $coming_from_config = $config_path == $referrer_path;
+
+  // Open <details> element if coming from config page.
+  if ($coming_from_config) {
+    $form['settings']['attributes']['#open'] = TRUE;
+  }
+
+  $destination = \Drupal::destination()->getAsArray();
+  $config_path = Url::fromRoute('block_attributes.config', [], ['query' => $destination])->toString();
+
+  if (count($attributes)) {
+    $form['settings']['attributes']['#description'] = '<small>' . t('Manage available attributes <a href="@config">here</a>.', ['@config' => $config_path]) . '</small>';
+  }
+  else {
+    $form['settings']['attributes']['help'] = [
+      '#markup' => t('Manage available attributes <a href="@config">here</a>.', ['@config' => $config_path]),
+    ];
+  }
+
+  $autofocus = FALSE;
+
+  // Iterate all defined attributes and create text field for them.
+  foreach ($attributes as $attribute => $info) {
+    // Provide default label / description for attributes.
+    if (!$info['label']) {
+      $info['label'] = str_replace('-', ' ', Unicode::ucfirst($attribute));
+    }
+    if (!$info['description']) {
+      $info['description'] = t('Enter value for <code>@attribute</code> attribute.', ['@attribute' => $attribute]);
+    }
+
+    // Determine type based on options field.
+    $type = !empty($info['options']) ? 'select' : 'textfield';
+
+    $form['settings']['attributes'][$attribute] = [
+      '#type' => $type,
+      '#title' => $info['label'],
+      '#description' => $info['description'],
+      '#default_value' => $config['attributes'][$attribute] ?? '',
+    ];
+
+    // Fill options if select list.
+    if ($type == 'select') {
+      $form['settings']['attributes'][$attribute]['#empty_option'] = '- ' . t('Select value') . ' -';
+      $form['settings']['attributes'][$attribute]['#options'] = $info['options'];
+    }
+
+    // Add "autofocus" attribute for first attribute input field
+    // if coming from config page.
+    if ($coming_from_config && !$autofocus) {
+      $form['settings']['attributes'][$attribute]['#attributes'] = ['autofocus' => 'autofocus'];
+      $autofocus = TRUE;
+    }
+  }
+
+  $form['actions']['submit']['#submit'][] = 'block_attributes_form_block_form_submit';
+}
+
+/**
+ * Submit callback which adds the attributes to the block configuration.
+ */
+function block_attributes_form_block_form_submit($form, FormStateInterface $form_state) {
+  $block = $form_state->getFormObject()->getEntity();
+  $plugin = $block->getPlugin();
+
+  $attributes = $form_state->getValue('settings')['attributes'];
+  $plugin->setConfigurationValue('attributes', $attributes);
+
+  $block->save();
+}
+
+/**
+ * Implements hook_block_build_alter().
+ */
+function block_attributes_block_build_alter(array &$build, BlockPluginInterface $block) {
+  // The rendered attributes are filtered against block_attributes.config, so
+  // a cached block has to be rebuilt when that configuration changes.
+  if (!empty($block->getConfiguration()['attributes'])) {
+    CacheableMetadata::createFromRenderArray($build)
+      ->addCacheableDependency(\Drupal::config('block_attributes.config'))
+      ->applyTo($build);
+  }
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function block_attributes_preprocess_block(&$variables, $hook) {
+  if (isset($variables['configuration']['attributes'])) {
+    $definitions = \Drupal::config('block_attributes.config')->get('attributes');
+    $attributes = BlockAttributesChecker::filterAttributeValues($variables['configuration']['attributes'], $definitions);
+
+    foreach ($attributes as $name => $value) {
+      if (isset($variables['attributes'][$name]) && is_array($variables['attributes'][$name])) {
+        $values = explode(' ', $value);
+        $values = array_map('trim', $values);
+        $values = array_filter($values, 'strlen');
+
+        $variables['attributes'][$name] = array_merge($variables['attributes'][$name], $values);
+      }
+      else {
+        $variables['attributes'][$name] = [$value];
+      }
+    }
+  }
+}

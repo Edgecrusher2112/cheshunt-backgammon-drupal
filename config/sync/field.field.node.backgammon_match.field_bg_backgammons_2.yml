@@ -1,0 +1,25 @@
+uuid: e5ffa300-d4da-4106-bd68-cf39eec41567
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bg_backgammons_2
+    - node.type.backgammon_match
+id: node.backgammon_match.field_bg_backgammons_2
+field_name: field_bg_backgammons_2
+entity_type: node
+bundle: backgammon_match
+label: 'P2 Backgammons'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

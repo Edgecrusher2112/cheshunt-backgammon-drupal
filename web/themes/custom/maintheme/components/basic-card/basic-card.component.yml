@@ -1,0 +1,41 @@
+name: Basic Card
+description: Reusable Bootstrap 5 card.
+
+props:
+  type: object
+  properties:
+    title:
+      type: string
+      title: Card title
+
+    header_classes:
+      type: string
+      title: Header classes
+      description: Optional CSS classes for the card header, such as bg-primary text-white.
+
+    margin:
+        type: string
+        title: Margin size
+        enum:
+          - mb-0
+          - mb-1
+          - mb-2
+          - mb-3
+          - mb-4
+          - mb-5
+
+    padding:
+        type: string
+        title: Padding size
+        enum:
+          - p-0
+          - p-1
+          - p-2
+          - p-3
+          - p-4
+          - p-5
+
+slots:
+  content:
+    title: Card body
+    description: Content displayed inside the card.

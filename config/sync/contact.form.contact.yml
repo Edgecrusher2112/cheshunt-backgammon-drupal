@@ -1,0 +1,12 @@
+uuid: f7fe6618-16d4-49cc-8826-89b3effbaf3e
+langcode: en-gb
+status: true
+dependencies: {  }
+id: contact
+label: Contact
+recipients:
+  - info@cheshuntbackgammon.club
+reply: ''
+weight: 0
+message: "Thanks for getting in touch with Cheshunt Backgammon Club.\r\n\r\nI've received your message, and will get back to you as soon as I can."
+redirect: /

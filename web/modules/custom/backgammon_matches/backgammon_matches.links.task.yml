@@ -1,0 +1,11 @@
+backgammon_matches.my_fixtures:
+  title: My Fixtures
+  route_name: backgammon_matches.my_fixtures
+  base_route: entity.user.canonical
+  weight: 5
+
+backgammon_matches.result:
+  title: Match result
+  route_name: backgammon_matches.result
+  base_route: entity.node.canonical
+  weight: 5

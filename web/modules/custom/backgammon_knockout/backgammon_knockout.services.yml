@@ -1,0 +1,4 @@
+services:
+  backgammon_knockout.brackets:
+    class: Drupal\backgammon_knockout\Service\Brackets
+    arguments: ['@entity_type.manager', '@lock', '@database', '@current_user', '@backgammon_matches.results']

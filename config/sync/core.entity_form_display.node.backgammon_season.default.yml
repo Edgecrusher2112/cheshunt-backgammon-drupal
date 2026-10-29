@@ -1,0 +1,226 @@
+uuid: ded9f205-af5f-42c5-b0e6-af1d76182bf7
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.field.node.backgammon_season.field_bl_division
+    - field.field.node.backgammon_season.field_bl_end
+    - field.field.node.backgammon_season.field_bl_matches_per_week
+    - field.field.node.backgammon_season.field_bl_meetings
+    - field.field.node.backgammon_season.field_bl_players
+    - field.field.node.backgammon_season.field_bl_runner_up
+    - field.field.node.backgammon_season.field_bl_season
+    - field.field.node.backgammon_season.field_bl_start
+    - field.field.node.backgammon_season.field_bl_status
+    - field.field.node.backgammon_season.field_bl_target
+    - field.field.node.backgammon_season.field_bl_winner
+    - node.type.backgammon_season
+  module:
+    - datetime
+    - field_group
+    - path
+third_party_settings:
+  field_group:
+    group_division_season:
+      children:
+        - field_bl_division
+        - field_bl_season
+      label: 'Division & Season'
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-2'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_dates:
+      children:
+        - field_bl_start
+        - field_bl_end
+      label: Dates
+      region: content
+      parent_name: ''
+      weight: 2
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-2'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_extras:
+      children:
+        - field_bl_meetings
+        - field_bl_matches_per_week
+        - field_bl_target
+      label: Extras
+      region: content
+      parent_name: ''
+      weight: 3
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-3'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_status:
+      children:
+        - field_bl_status
+      label: Status
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: html_element
+      format_settings:
+        classes: 'class-row col-1'
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+id: node.backgammon_season.default
+targetEntityType: node
+bundle: backgammon_season
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bl_division:
+    type: number
+    weight: 2
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bl_end:
+    type: datetime_default
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bl_matches_per_week:
+    type: number
+    weight: 5
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bl_meetings:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bl_players:
+    type: entity_reference_autocomplete
+    weight: 6
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_bl_season:
+    type: number
+    weight: 3
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_bl_start:
+    type: datetime_default
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bl_status:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bl_target:
+    type: options_select
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 10
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 7
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 8
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  field_bl_runner_up: true
+  field_bl_winner: true
+  promote: true
+  sticky: true

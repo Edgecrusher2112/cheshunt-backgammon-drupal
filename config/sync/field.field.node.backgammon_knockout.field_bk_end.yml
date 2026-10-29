@@ -1,0 +1,21 @@
+uuid: 9775b42d-7904-4812-ad81-dbd09af74659
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bk_end
+    - node.type.backgammon_knockout
+  module:
+    - datetime
+id: node.backgammon_knockout.field_bk_end
+field_name: field_bk_end
+entity_type: node
+bundle: backgammon_knockout
+label: 'End Date'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

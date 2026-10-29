@@ -1,0 +1,11 @@
+{
+    "name": "drupal/betterlogin",
+    "description": "Make the login screens better :)",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "drupal/core": "^10.1 || ^11"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

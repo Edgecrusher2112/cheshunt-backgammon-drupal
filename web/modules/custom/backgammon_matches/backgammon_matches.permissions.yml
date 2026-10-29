@@ -1,0 +1,7 @@
+administer backgammon matches:
+  title: Administer backgammon matches
+  description: Create and manage matches and amend saved results.
+  restrict access: true
+enter backgammon results:
+  title: Enter backgammon results
+  description: Enter the initial result for a match in which the user participates.

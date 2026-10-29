@@ -1,0 +1,25 @@
+uuid: b7b6517a-e12e-4694-a200-8eaa4b02f563
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bl_players
+    - node.type.backgammon_season
+id: node.backgammon_season.field_bl_players
+field_name: field_bl_players
+entity_type: node
+bundle: backgammon_season
+label: 'Season players'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    filter:
+      type: role
+      role:
+        league_player: league_player
+field_type: entity_reference

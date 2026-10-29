@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Admin UI tweaks.
+ */
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function admin_tweaks_menu_local_tasks_alter(array &$data, $route_name, \Drupal\Core\Cache\RefinableCacheableDependencyInterface &$cacheability): void {
+  foreach ($data['tabs'] ?? [] as $level => $tabs) {
+    foreach ($tabs as $plugin_id => $tab) {
+      $url = $tab['#link']['url'] ?? NULL;
+      if ($url instanceof \Drupal\Core\Url && $url->isRouted() && str_ends_with($url->getRouteName(), '.version_history')) {
+        unset($data['tabs'][$level][$plugin_id]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function admin_tweaks_page_attachments(array &$attachments) {
+  // Load only on admin pages (Claro).
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    $attachments['#attached']['library'][] = 'admin_tweaks/admin';
+  }
+}
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function admin_tweaks_config_schema_info_alter(array &$definitions) {
+  // Block Attributes stores arbitrary HTML attributes on all block plugins.
+  // Declare them on the common parent so each plugin inherits the schema.
+  $definitions['block_settings']['mapping']['attributes'] = [
+    'type' => 'sequence',
+    'label' => 'HTML attributes',
+    'sequence' => [
+      'type' => 'string',
+      'label' => 'Attribute value',
+    ],
+  ];
+}

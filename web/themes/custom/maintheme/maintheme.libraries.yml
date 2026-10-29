@@ -1,0 +1,22 @@
+theme-init:
+  header: true
+  js:
+    js/theme-init.js: { minified: false }
+
+global-styling:
+  dependencies:
+    - maintheme/fontawesome
+  css:
+    theme:
+      'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap': { type: external, minified: true }
+      css/style.css: {}
+  js:
+    js/global.js: {}
+
+fontawesome:
+  css:
+    theme:
+      assets/fontawesome/css/fontawesome.min.css: { minified: true }
+      assets/fontawesome/css/solid.min.css: { minified: true }
+      assets/fontawesome/css/regular.min.css: { minified: true }
+      assets/fontawesome/css/brands.min.css: { minified: true }

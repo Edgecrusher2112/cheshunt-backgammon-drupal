@@ -1,0 +1,23 @@
+uuid: 9d41b692-cf3e-402b-aad6-2036da80bb6c
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bg_score_2
+    - node.type.backgammon_match
+id: node.backgammon_match.field_bg_score_2
+field_name: field_bg_score_2
+entity_type: node
+bundle: backgammon_match
+label: 'P2 Score'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

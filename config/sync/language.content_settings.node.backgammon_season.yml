@@ -1,0 +1,11 @@
+uuid: 30343a18-fb34-490f-9b37-f4b0646e4eae
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - node.type.backgammon_season
+id: node.backgammon_season
+target_entity_type_id: node
+target_bundle: backgammon_season
+default_langcode: site_default
+language_alterable: false

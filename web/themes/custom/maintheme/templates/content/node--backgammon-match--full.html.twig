@@ -1,0 +1,71 @@
+{# Full-page presentation for a Backgammon Match node. #}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    not node.isPublished() ? 'node--unpublished',
+    'node--view-mode-full',
+  ]
+%}
+{{ attach_library('bootstrap5/node') }}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+    <div class="card bg-light-subtle shadow-sm mb-4">
+      <div class="card-body text-center">
+
+        <h1 class="card-title">Match Stats</h1>
+
+        {% if node.field_bk_tournament.target_id %}
+          <h2 class="fs-4">{{ content.field_bk_tournament.0 }}</h2>
+        {% elseif node.field_bl_season_ref.target_id %}
+          <h2 class="fs-5">{{ content.field_bl_season_ref.0 }}</h3>
+        {% endif %}
+
+        {# Scores and players #}
+        <table class="table">
+          <tbody>
+            <tr class="fs-4" valign="middle">
+              <td class="text-end fw-bold col-5">{{ content.field_bg_player_1.0 }}</td>
+              <td class="text-center fw-bold col-2">{{ content.field_bg_score_1.0 }}<strong class="d-inline-flex mx-3">v</strong>{{ content.field_bg_score_2.0 }}</td>
+              <td class="text-start fw-bold col-5">{{ content.field_bg_player_2.0 }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        {# Backgammons #}
+        <table class="table">
+            <tr>
+              <td class="text-center fs-5 fw-bold">Backgammons</td>
+            </tr>
+            <tr>
+              <td class="text-center col-2">
+                {{ content.field_bg_backgammons_1.0 }}
+                <strong class="d-inline-flex mx-3">-</strong>
+                {{ content.field_bg_backgammons_2.0 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        {# Gammons #}
+        <table class="table">
+            <tr>
+              <td class="text-center fs-5 fw-bold">Gammons</td>
+            </tr>
+            <tr>
+              <td class="text-center col-2">
+                {{ content.field_bg_gammons_1.0 }}
+                <strong class="d-inline-flex mx-3">-</strong>
+                {{ content.field_bg_gammons_2.0 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+</article>
+

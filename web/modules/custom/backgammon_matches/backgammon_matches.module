@@ -1,0 +1,135 @@
+<?php
+
+/**
+ * @file
+ * Match access and shared validation hooks.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function backgammon_matches_preprocess_page_title(array &$variables) {
+  $route = \Drupal::routeMatch();
+  $node = $route->getParameter('node');
+  if ($route->getRouteName() !== 'entity.node.canonical'
+    || !$node instanceof NodeInterface || $node->bundle() !== 'backgammon_match') {
+    return;
+  }
+  $first = $node->get('field_bg_player_1')->entity;
+  $second = $node->get('field_bg_player_2')->entity;
+  if (!$first || !$second) {
+    return;
+  }
+  // Change only the displayed heading, not the match's stored Match ID title.
+  // Translation placeholders escape names, including any HTML-like characters.
+  $variables['title'] = ['#markup' => t('@first v @second', [
+    '@first' => $first->getDisplayName(),
+    '@second' => $second->getDisplayName(),
+  ])];
+  // Refresh cached headings when a player is renamed or a fixture is changed.
+  CacheableMetadata::createFromObject($node)
+    ->addCacheableDependency($first)
+    ->addCacheableDependency($second)
+    ->addCacheContexts(['route', 'languages:language_interface'])
+    ->applyTo($variables['title']);
+}
+
+/**
+ * Implements hook_node_create().
+ */
+function backgammon_matches_node_create(NodeInterface $node) {
+  if ($node->bundle() === 'backgammon_match') {
+    // Drupal requires a title before the database assigns the new node's ID.
+    $node->setTitle('Pending');
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function backgammon_matches_form_node_form_alter(array &$form, FormStateInterface $form_state) {
+  $node = $form_state->getFormObject()->getEntity();
+  if ($node->bundle() !== 'backgammon_match') {
+    return;
+  }
+  if (isset($form['title'])) {
+    $form['title']['#access'] = FALSE;
+  }
+
+  $is_league = $node->hasField('field_bl_season_ref')
+    && !$node->get('field_bl_season_ref')->isEmpty();
+  $is_knockout = $node->hasField('field_bk_tournament')
+    && !$node->get('field_bk_tournament')->isEmpty();
+
+  if ($is_league) {
+    foreach (['field_bk_tournament', 'field_bk_round', 'field_bk_slot'] as $field) {
+      if (isset($form[$field])) {
+        $form[$field]['#access'] = FALSE;
+      }
+    }
+  }
+  elseif ($is_knockout && isset($form['field_bl_season_ref'])) {
+    $form['field_bl_season_ref']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function backgammon_matches_node_presave(NodeInterface $node) {
+  if ($node->bundle() === 'backgammon_match') {
+    // Keep the generated title intact on result edits and API saves too.
+    $node->setTitle($node->id() ? 'Match ' . $node->id() : 'Pending');
+  }
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function backgammon_matches_node_insert(NodeInterface $node) {
+  if ($node->bundle() === 'backgammon_match') {
+    // The ID only exists after insert. Update the initial revision in place;
+    // this second save triggers update hooks, not this insert hook again.
+    $node->setTitle('Match ' . $node->id());
+    $node->setNewRevision(FALSE);
+    $node->save();
+  }
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function backgammon_matches_node_access(NodeInterface $node, $operation, AccountInterface $account) {
+  if ($node->bundle() !== 'backgammon_match' || !in_array($operation, ['update', 'delete'], TRUE)) {
+    return AccessResult::neutral();
+  }
+  // Whole-node editing belongs to admins; players use the scoped result form.
+  return ($account->hasPermission('administer backgammon matches')
+    ? AccessResult::allowed() : AccessResult::forbidden())
+    ->cachePerPermissions()->addCacheableDependency($node);
+}
+
+/**
+ * Implements hook_node_create_access().
+ */
+function backgammon_matches_node_create_access(AccountInterface $account, array $context, $bundle) {
+  if ($bundle !== 'backgammon_match') {
+    return AccessResult::neutral();
+  }
+  return ($account->hasPermission('administer backgammon matches')
+    ? AccessResult::allowed() : AccessResult::forbidden())->cachePerPermissions();
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function backgammon_matches_entity_type_alter(array &$entity_types) {
+  // Entity validation also runs on normal admin forms and the result API.
+  $entity_types['node']->addConstraint('BackgammonMatch');
+}

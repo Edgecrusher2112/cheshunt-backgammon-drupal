@@ -1,0 +1,9 @@
+{# Keep containers with attributes or contextual links; omit empty wrappers. #}
+{% if attributes|render|trim or title_suffix|render|trim %}
+<div{{ attributes }}>
+  {{ title_suffix }}
+  {{ children }}
+</div>
+{% else %}
+  {{ children }}
+{% endif %}

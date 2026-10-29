@@ -1,0 +1,31 @@
+uuid: d6dade0c-314b-409d-af31-7777641fe992
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - user
+  theme:
+    - maintheme
+_core:
+  default_config_hash: 2WG8ts-UD4Bgukg-cNn-QJU1Djmo6lae9D2tA2F0hyI
+id: maintheme_local_actions
+theme: maintheme
+region: content
+weight: 0
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+  attributes:
+    class: ''
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      administrator: administrator

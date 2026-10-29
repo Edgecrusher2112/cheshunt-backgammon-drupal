@@ -1,0 +1,5 @@
+backgammon_knockout.draw:
+  title: Generate draw
+  route_name: backgammon_knockout.draw
+  base_route: entity.node.canonical
+  weight: 7

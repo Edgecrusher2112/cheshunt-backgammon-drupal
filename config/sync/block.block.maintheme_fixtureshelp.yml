@@ -1,0 +1,38 @@
+uuid: eb6ef074-296c-4dc7-ade0-ff39efe02010
+langcode: en-gb
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:e43b4299-d29b-4266-b72d-dd6f51ec1dca'
+  module:
+    - block_content
+    - system
+    - user
+  theme:
+    - maintheme
+id: maintheme_fixtureshelp
+theme: maintheme
+region: content
+weight: 2
+provider: null
+plugin: 'block_content:e43b4299-d29b-4266-b72d-dd6f51ec1dca'
+settings:
+  id: 'block_content:e43b4299-d29b-4266-b72d-dd6f51ec1dca'
+  label: 'Fixtures - Help'
+  label_display: '0'
+  provider: block_content
+  attributes:
+    class: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /my-fixtures
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      league_player: league_player

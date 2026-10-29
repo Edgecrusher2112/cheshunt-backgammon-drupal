@@ -1,0 +1,4 @@
+administer backgammon leagues:
+  title: Administer backgammon leagues
+  description: Manage seasons and generate missing fixtures.
+  restrict access: true

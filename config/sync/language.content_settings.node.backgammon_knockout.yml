@@ -1,0 +1,11 @@
+uuid: f660cc13-8174-42ff-bd0f-205d990eb99e
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - node.type.backgammon_knockout
+id: node.backgammon_knockout
+target_entity_type_id: node
+target_bundle: backgammon_knockout
+default_langcode: site_default
+language_alterable: false

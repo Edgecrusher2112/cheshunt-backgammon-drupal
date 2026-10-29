@@ -1,0 +1,21 @@
+uuid: ecbd324c-9514-4555-9ece-c91e02de24e7
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bg_target
+    - node.type.backgammon_match
+  module:
+    - options
+id: node.backgammon_match.field_bg_target
+field_name: field_bg_target
+entity_type: node
+bundle: backgammon_match
+label: Length
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

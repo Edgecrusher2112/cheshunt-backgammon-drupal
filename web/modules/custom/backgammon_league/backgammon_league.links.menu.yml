@@ -1,0 +1,5 @@
+backgammon_league.seasons:
+  title: Leagues
+  route_name: backgammon_league.seasons
+  menu_name: account
+  weight: 6

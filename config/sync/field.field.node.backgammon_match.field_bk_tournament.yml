@@ -1,0 +1,29 @@
+uuid: 014fdbd7-1e35-4153-a497-da125bbde949
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bk_tournament
+    - node.type.backgammon_knockout
+    - node.type.backgammon_match
+id: node.backgammon_match.field_bk_tournament
+field_name: field_bk_tournament
+entity_type: node
+bundle: backgammon_match
+label: Knockout
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      backgammon_knockout: backgammon_knockout
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

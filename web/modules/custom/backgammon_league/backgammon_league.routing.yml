@@ -1,0 +1,18 @@
+backgammon_league.fixtures:
+  path: '/node/{node}/generate-fixtures'
+  defaults:
+    _form: '\Drupal\backgammon_league\Form\GenerateFixturesForm'
+    _title: 'Update season fixtures'
+  requirements:
+    _custom_access: '\Drupal\backgammon_league\Form\GenerateFixturesForm::access'
+  options:
+    parameters:
+      node:
+        type: entity:node
+backgammon_league.seasons:
+  path: '/leagues'
+  defaults:
+    _controller: '\Drupal\backgammon_league\Controller\SeasonsController::build'
+    _title: 'Leagues'
+  requirements:
+    _permission: 'access content'

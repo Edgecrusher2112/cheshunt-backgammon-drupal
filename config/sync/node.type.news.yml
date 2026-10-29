@@ -1,0 +1,17 @@
+uuid: a8741aff-8d37-4135-aeed-e19a2f25ad39
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: News
+type: news
+description: 'Create general site news.'
+help: null
+new_revision: false
+preview_mode: 1
+display_submitted: true

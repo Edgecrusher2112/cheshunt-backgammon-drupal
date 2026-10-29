@@ -1,0 +1,19 @@
+backgammon_knockout.list:
+  path: '/knockouts'
+  defaults:
+    _controller: '\Drupal\backgammon_knockout\Controller\TournamentsController::build'
+    _title: 'Knockout Tournaments'
+  requirements:
+    _permission: 'access content'
+
+backgammon_knockout.draw:
+  path: '/node/{node}/knockout-draw'
+  defaults:
+    _form: '\Drupal\backgammon_knockout\Form\DrawForm'
+    _title: 'Generate knockout draw'
+  requirements:
+    _custom_access: '\Drupal\backgammon_knockout\Form\DrawForm::access'
+  options:
+    parameters:
+      node:
+        type: entity:node

@@ -1,0 +1,12 @@
+name: Block Attributes
+type: module
+description: 'Allows you to add attributes to blocks.'
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - drupal:block
+configure: block_attributes.config
+
+# Information added by Drupal.org packaging script on 2026-10-21
+version: '2.1.0'
+project: 'block_attributes'
+datestamp: 1792574941

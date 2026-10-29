@@ -1,0 +1,14 @@
+uuid: e25df2aa-bf39-49d5-a25f-d7fcd7932300
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - user.role.league_player
+  module:
+    - user
+id: user_remove_role_action.league_player
+label: 'Remove the League Player role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: league_player

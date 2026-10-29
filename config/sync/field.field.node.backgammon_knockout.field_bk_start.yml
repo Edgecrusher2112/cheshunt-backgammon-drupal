@@ -1,0 +1,21 @@
+uuid: b63fdac6-b377-43f8-a1fd-938eaa764dcb
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bk_start
+    - node.type.backgammon_knockout
+  module:
+    - datetime
+id: node.backgammon_knockout.field_bk_start
+field_name: field_bk_start
+entity_type: node
+bundle: backgammon_knockout
+label: 'Start Date'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

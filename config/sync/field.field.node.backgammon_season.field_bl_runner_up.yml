@@ -1,0 +1,21 @@
+uuid: 62f0abf7-d1e3-400c-9f4b-6da980df165b
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bl_runner_up
+    - node.type.backgammon_season
+id: node.backgammon_season.field_bl_runner_up
+field_name: field_bl_runner_up
+entity_type: node
+bundle: backgammon_season
+label: 'League runner-up'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings: {  }
+field_type: entity_reference

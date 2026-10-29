@@ -1,0 +1,6 @@
+{{ attach_library('bootstrap5/node') }}
+<p class="text-muted small">
+  {{ 'Published on @date'|t({'@date': node.getCreatedTime()|format_date('custom', 'j M Y')}) }}
+</p>
+
+{{ content }}

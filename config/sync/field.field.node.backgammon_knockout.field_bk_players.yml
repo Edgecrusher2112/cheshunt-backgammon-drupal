@@ -1,0 +1,33 @@
+uuid: cd2bf9bc-e6ec-46ab-ad14-06d08eb54d47
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bk_players
+    - node.type.backgammon_knockout
+id: node.backgammon_knockout.field_bk_players
+field_name: field_bk_players
+entity_type: node
+bundle: backgammon_knockout
+label: 'Tournament Players'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: role
+      role:
+        league_player: league_player
+        administrator: '0'
+        league_admin: '0'
+    include_anonymous: true
+field_type: entity_reference

@@ -1,0 +1,17 @@
+uuid: e84acec6-0370-467b-9d87-80cc2a0ed45f
+langcode: en-gb
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Knockout
+type: backgammon_knockout
+description: 'Create a Backgammon Knockout.'
+help: null
+new_revision: false
+preview_mode: 0
+display_submitted: false

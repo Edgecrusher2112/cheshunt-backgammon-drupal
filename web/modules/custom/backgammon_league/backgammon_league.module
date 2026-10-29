@@ -1,0 +1,190 @@
+<?php
+
+/**
+ * @file
+ * Season permissions and Views-compatible season page presentation.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
+
+/** Implements hook_node_create(). */
+function backgammon_league_node_create(NodeInterface $node) {
+  if ($node->bundle() === 'backgammon_season') {
+    // Satisfy Drupal's required title while the season fields are being entered.
+    $node->setTitle('Pending');
+  }
+}
+
+/** Implements hook_node_presave(). */
+function backgammon_league_node_presave(NodeInterface $node) {
+  if ($node->bundle() === 'backgammon_season') {
+    // Generate on every save so field changes and programmatic saves stay in sync.
+    $node->setTitle('Division ' . $node->get('field_bl_division')->value
+      . ' – Season ' . $node->get('field_bl_season')->value);
+    if ($node->hasField('field_bl_winner') && $node->hasField('field_bl_runner_up')) {
+      \Drupal::service('backgammon_league.seasons')->assignPlacings($node);
+    }
+  }
+}
+
+/** Implements hook_node_update(). */
+function backgammon_league_node_update(NodeInterface $node) {
+  if ($node->bundle() !== 'backgammon_match'
+    || !$node->hasField('field_bl_season_ref')
+    || $node->get('field_bl_season_ref')->isEmpty()) {
+    return;
+  }
+  $season = $node->get('field_bl_season_ref')->entity;
+  if (!$season || $season->get('field_bl_status')->value !== 'completed') {
+    return;
+  }
+  // The update hook runs before Drupal refreshes the entity storage cache.
+  // Ensure standings use the newly saved result rather than its prior values.
+  \Drupal::entityTypeManager()->getStorage('node')->resetCache([$node->id()]);
+  if (\Drupal::service('backgammon_league.seasons')->assignPlacings($season)) {
+    $season->setNewRevision(TRUE);
+    $season->setRevisionLogMessage('League winner and runner-up refreshed after a result change.');
+    $season->save();
+  }
+}
+
+/** Implements hook_node_access(). */
+function backgammon_league_node_access(NodeInterface $node, $operation, AccountInterface $account) {
+  if ($node->bundle() !== 'backgammon_season' || !in_array($operation, ['update', 'delete'])) {
+    return AccessResult::neutral();
+  }
+  return ($account->hasPermission('administer backgammon leagues') ? AccessResult::allowed() : AccessResult::forbidden())->cachePerPermissions();
+}
+
+/** Implements hook_node_create_access(). */
+function backgammon_league_node_create_access(AccountInterface $account, array $context, $bundle) {
+  if ($bundle !== 'backgammon_season') {
+    return AccessResult::neutral();
+  }
+  return ($account->hasPermission('administer backgammon leagues') ? AccessResult::allowed() : AccessResult::forbidden())->cachePerPermissions();
+}
+
+/** Implements hook_form_BASE_FORM_ID_alter(). */
+function backgammon_league_form_node_form_alter(array &$form, FormStateInterface $state) {
+  if ($state->getFormObject()->getEntity()->bundle() === 'backgammon_season') {
+    if (isset($form['title'])) {
+      $form['title']['#access'] = FALSE;
+    }
+    $form['#validate'][] = 'backgammon_league_validate_season_form';
+    $form['league_help'] = ['#markup' => '<p>' . t('Save the season and its players, then use Update fixtures to generate missing matches. Completed seasons remain available in League seasons and Views.') . '</p>', '#weight' => -20];
+  }
+}
+
+/** Validates date order and prevents duplicate participant references. */
+function backgammon_league_validate_season_form(array &$form, FormStateInterface $state) {
+  $season = $state->getFormObject()->getEntity();
+  if ($season->get('field_bl_start')->value > $season->get('field_bl_end')->value) {
+    $state->setErrorByName('field_bl_end', t('The end date must not precede the start date.'));
+  }
+  $players = array_column($season->get('field_bl_players')->getValue(), 'target_id');
+  if (count($players) !== count(array_unique($players))) {
+    $state->setErrorByName('field_bl_players', t('Add each player only once.'));
+  }
+}
+
+/** Implements hook_ENTITY_TYPE_view(). */
+function backgammon_league_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() !== 'backgammon_season' || $view_mode !== 'full') {
+    return;
+  }
+  $service = \Drupal::service('backgammon_league.seasons');
+  $cache = (new CacheableMetadata())->setCacheTags(['node_list:backgammon_match', 'node_list', 'user_list'])
+    ->setCacheContexts(['user.permissions', 'user.node_grants:view']);
+  $rows = [];
+  foreach ($service->standings($entity) as $row) {
+    $player = \Drupal::entityTypeManager()->getStorage('user')->load($row['uid']);
+    if ($player) {
+      $cache->addCacheableDependency($player);
+    }
+    $values = [$row['position'], $player?->getDisplayName() ?? t('Unknown player'), $row['played'], $row['wins'], $row['losses'], $row['backgammons'], $row['gammons'], $row['points']];
+    $rows[] = array_map(
+      static fn($value, $index) => [
+        'data' => $value,
+        'class' => array_filter([
+          $index === 1 ? 'text-start' : 'text-center',
+          $index === 0 ? 'text-primary' : NULL,
+          in_array($index, [1, 2, 7], TRUE) ? 'fw-bold' : NULL,
+        ]),
+      ],
+      $values,
+      array_keys($values),
+    );
+  }
+  $build['league_standings'] = [
+    '#type' => 'table', '#weight' => 40,
+    '#header' => [
+      ['data' => '', 'class' => ['text-center', 'fw-bold']],
+      ['data' => '', 'class' => ['text-start', 'fw-bold']],
+      ['data' => t('P'), 'class' => ['text-center', 'fw-bold']],
+      ['data' => t('W'), 'class' => ['text-center', 'fw-bold']],
+      ['data' => t('L'), 'class' => ['text-center', 'fw-bold']],
+      ['data' => t('BG'), 'class' => ['text-center', 'fw-bold']],
+      ['data' => t('G'), 'class' => ['text-center', 'fw-bold']],
+      ['data' => t('PTS'), 'class' => ['text-center', 'fw-bold']],
+    ],
+    '#rows' => $rows, '#empty' => t('Add season players to display standings.'),
+  ];
+  $matches = [];
+  $matches_per_week = max(1, (int) $entity->get('field_bl_matches_per_week')->value);
+  $current_week = NULL;
+  foreach (array_values($service->matches($entity)) as $fixture_index => $match) {
+    $access = $match->access('view', NULL, TRUE);
+    $cache->addCacheableDependency($match)->addCacheableDependency($access);
+    if (!$access->isAllowed()) {
+      continue;
+    }
+    $names = [];
+    foreach ([1, 2] as $number) {
+      $player = $match->get('field_bg_player_' . $number)->entity;
+      $names[] = $player?->getDisplayName() ?? t('Unknown player');
+      if ($player) { $cache->addCacheableDependency($player); }
+    }
+    $entered = \Drupal::service('backgammon_matches.results')->hasResult($match);
+    $score_1 = $entered ? (int) $match->get('field_bg_score_1')->value : NULL;
+    $score_2 = $entered ? (int) $match->get('field_bg_score_2')->value : NULL;
+    $player_1_classes = ['col-4', 'text-end', 'fw-bold'];
+    $player_2_classes = ['col-4', 'text-start', 'fw-bold'];
+    if ($entered && $score_1 !== $score_2) {
+      if ($score_1 < $score_2) {
+        $player_1_classes[] = 'text-muted';
+      }
+      else {
+        $player_2_classes[] = 'text-muted';
+      }
+    }
+    $week = intdiv($fixture_index, $matches_per_week) + 1;
+    if ($week !== $current_week) {
+      $matches[] = [[
+        'data' => t('Match Week @week', ['@week' => $week]),
+        'class' => ['text-center', 'fw-bold'],
+        'colspan' => 5,
+      ]];
+      $current_week = $week;
+    }
+    $matches[] = [
+      ['data' => $names[0], 'class' => $player_1_classes],
+      ['data' => $entered ? $score_1 : '', 'class' => ['col-1', 'text-center', 'text-primary']],
+      ['data' => $entered ? 'v' : '-', 'class' => ['col-2', 'text-center', 'fw-bold']],
+      ['data' => $entered ? $score_2 : '', 'class' => ['col-1', 'text-center', 'text-primary']],
+      ['data' => $names[1], 'class' => $player_2_classes],
+    ];
+  }
+  $build['league_matches'] = [
+    '#type' => 'table',
+    '#weight' => 41,
+    '#rows' => $matches,
+    '#empty' => t('No fixtures generated yet.'),
+  ];
+  CacheableMetadata::createFromRenderArray($build)->merge($cache)->applyTo($build);
+}

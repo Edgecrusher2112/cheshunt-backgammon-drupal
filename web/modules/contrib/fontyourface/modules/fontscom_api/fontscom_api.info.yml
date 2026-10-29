@@ -1,0 +1,12 @@
+name: '@fontyourface - Fonts.com'
+type: module
+description: '@font-your-face provider with fonts.com fonts.'
+core_version_requirement: ^10.3 || ^11.2 || ^12
+package: '@font-your-face'
+dependencies:
+  - fontyourface:fontyourface
+
+# Information added by Drupal.org packaging script on 2026-10-15
+version: '4.3.1'
+project: 'fontyourface'
+datestamp: 1792057842

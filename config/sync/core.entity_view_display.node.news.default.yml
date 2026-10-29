@@ -1,0 +1,38 @@
+uuid: 41eda89d-f05d-49a4-a2b6-6648813d541e
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.field.node.news.field_body
+    - field.field.node.news.field_tournament_reference
+    - node.type.news
+  module:
+    - text
+    - user
+id: node.news.default
+targetEntityType: node
+bundle: news
+mode: default
+content:
+  field_body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_tournament_reference:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  langcode: true

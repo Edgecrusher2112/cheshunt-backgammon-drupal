@@ -1,0 +1,23 @@
+uuid: ffe9d6ef-708e-47f1-88c0-379fb566bf28
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bl_division
+    - node.type.backgammon_season
+id: node.backgammon_season.field_bl_division
+field_name: field_bl_division
+entity_type: node
+bundle: backgammon_season
+label: Division
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

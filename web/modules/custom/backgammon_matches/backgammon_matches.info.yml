@@ -1,0 +1,10 @@
+name: Backgammon Matches
+type: module
+description: Shared backgammon match records, result entry and permissions.
+package: Backgammon
+core_version_requirement: ^11
+dependencies:
+  - drupal:node
+  - drupal:user
+  - drupal:field
+  - drupal:options

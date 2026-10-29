@@ -1,0 +1,21 @@
+uuid: 5cd23383-2635-4a31-9cb2-0577e84a3055
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bk_target
+    - node.type.backgammon_knockout
+  module:
+    - options
+id: node.backgammon_knockout.field_bk_target
+field_name: field_bk_target
+entity_type: node
+bundle: backgammon_knockout
+label: Length
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

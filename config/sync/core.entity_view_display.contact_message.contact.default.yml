@@ -1,0 +1,20 @@
+uuid: 49c94cad-a924-45c3-9d01-834746f423de
+langcode: en-gb
+status: true
+dependencies:
+  config:
+    - contact.form.contact
+id: contact_message.contact.default
+targetEntityType: contact_message
+bundle: contact
+mode: default
+content:
+  message:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
