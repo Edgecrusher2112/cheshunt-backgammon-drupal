@@ -109,6 +109,8 @@ class MetatagAdminTest extends BrowserTestBase {
     $this->drupalGet('admin/config/search/metatag/global');
     $session->statusCodeEquals(200);
     $this->assertSession()->fieldExists('edit-title', $metatag_defaults->get('title'));
+    // Check that the tag descriptions are shown.
+    $session->pageTextContains('The text to display in the title bar');
     // Update the Global defaults and test them.
     $this->drupalGet('admin/config/search/metatag/global');
     $session->statusCodeEquals(200);

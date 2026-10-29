@@ -13,6 +13,10 @@ class MetatagHooks {
 
   /**
    * Implements hook_metatag_route_entity().
+   *
+   * @deprecated in metatag:2.2.2 and is removed from metatag:3.0.0. No replacement is available.
+   *
+   * @see https://www.drupal.org/node/3633239
    */
   #[Hook('metatag_route_entity')]
   public function metatagRouteEntity(RouteMatchInterface $route_match) {

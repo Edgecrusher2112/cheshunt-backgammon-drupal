@@ -90,7 +90,7 @@ function backgammon_knockout_node_view(array &$build, EntityInterface $entity, E
     $rows[] = [[
       'data' => KnockoutRound::label($round + 1, $round_count),
       'class' => ['text-center', 'fw-bold'],
-      'colspan' => 5,
+      'colspan' => 2,
     ]];
     foreach ($slots as $slot) {
       $player_ids = array_values($slot['players'] ?? []);
@@ -121,8 +121,8 @@ function backgammon_knockout_node_view(array &$build, EntityInterface $entity, E
           }
         }
       }
-      $player_1_classes = ['col-5', 'col-md-4', 'text-end', 'fw-bold'];
-      $player_2_classes = ['col-5', 'col-md-4', 'text-start', 'fw-bold'];
+      $player_1_classes = ['col-10', 'text-start', 'fw-bold', 'align-middle'];
+      $player_2_classes = ['col-10', 'text-start', 'fw-bold', 'align-middle'];
       if ($has_result && (int) $scores[0] !== (int) $scores[1]) {
         if ((int) $scores[0] < (int) $scores[1]) {
           $player_1_classes[] = 'text-muted';
@@ -133,10 +133,11 @@ function backgammon_knockout_node_view(array &$build, EntityInterface $entity, E
       }
       $rows[] = [
         ['data' => $names[0], 'class' => $player_1_classes],
-        ['data' => $scores[0], 'class' => ['col-auto', 'col-md-1', 'text-center', 'text-primary']],
-        ['data' => $has_result ? 'v' : '-', 'class' => ['col-auto', 'col-md-2', 'text-center', 'fw-bold']],
-        ['data' => $scores[1], 'class' => ['col-auto', 'col-md-1', 'text-center', 'text-primary']],
+        ['data' => $has_result ? $scores[0] : '—', 'class' => ['col-2', 'text-center', 'text-primary', 'fw-bold', 'align-middle']],
+      ];
+      $rows[] = [
         ['data' => $names[1], 'class' => $player_2_classes],
+        ['data' => $has_result ? $scores[1] : '—', 'class' => ['col-2', 'text-center', 'text-primary', 'fw-bold', 'align-middle']],
       ];
     }
   }

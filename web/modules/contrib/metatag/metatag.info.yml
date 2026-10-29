@@ -3,13 +3,12 @@ type: module
 description: Manage meta tags for all entities.
 core_version_requirement: ^10.3 || ^11 || ^12
 package: SEO
-php: 8.0
 configure: entity.metatag_defaults.collection
 dependencies:
   - drupal:field
   - token:token
 
-# Information added by Drupal.org packaging script on 2026-10-24
-version: '2.2.1'
+# Information added by Drupal.org packaging script on 2026-10-29
+version: '2.2.4'
 project: 'metatag'
-datestamp: 1792864794
+datestamp: 1793239111

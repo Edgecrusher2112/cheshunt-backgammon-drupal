@@ -10,7 +10,7 @@ dependencies:
 test_dependencies:
   - metatag:metatag
 
-# Information added by Drupal.org packaging script on 2026-10-24
-version: '2.2.1'
+# Information added by Drupal.org packaging script on 2026-10-29
+version: '2.2.4'
 project: 'metatag'
-datestamp: 1792864794
+datestamp: 1793239111

@@ -7,6 +7,9 @@ services:
   Drupal\metatag_page_manager\Hook\FormHooks:
     class: Drupal\metatag_page_manager\Hook\FormHooks
     autowire: true
+    deprecated: The "%service_id%" service is deprecated in metatag:2.2.2 and is removed from metatag:3.0.0. No replacement is available. See https://www.drupal.org/node/3633239
+
   Drupal\metatag_page_manager\Hook\MetatagHooks:
     class: Drupal\metatag_page_manager\Hook\MetatagHooks
     autowire: true
+    deprecated: The "%service_id%" service is deprecated in metatag:2.2.2 and is removed from metatag:3.0.0. No replacement is available. See https://www.drupal.org/node/3633239

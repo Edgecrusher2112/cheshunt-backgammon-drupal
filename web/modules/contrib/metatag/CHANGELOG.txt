@@ -1,3 +1,38 @@
+Metatag 2.2.4, 2026-10-28
+-------------------------
+#3633988 by jimmb, DamienMcKenna: Fixed Shortlink URL meta tag label.
+#3633337 by shubhamgoel, DamienMcKenna, liam morland: Remove PHP limit from info
+  and composer files.
+#3633958 by bserem, DamienMcKenna: Token 8.x-1.17 is required.
+#3633739 by Jonasanne, rahulk, liam morland, DamienMcKenna: Fixed deprecated
+  services.
+
+
+Metatag 2.2.3, 2026-10-27
+-------------------------
+#3633443 by eduardo morales alberti, lmoeni, vensires, mrshowerman, johnatas,
+  chemeon, damienmckenna: List of config items wasn't converted to a string in
+  metatag_post_update_v2_06_error_page_defaults().
+
+
+Metatag 2.2.2, 2026-10-27
+-------------------------
+#3632975 by fherman95, shubhamgoel, DamienMcKenna: Empty update script to force
+  a cache rebuild.
+#3632995 by wamwam, f0ns, jaypan, DamienMcKenna: Missing service alias for
+  MetatagRoutesHelperInterface.
+#3633005 by f0ns, gillesbailleux, DamienMcKenna: Tag and group descriptions
+  stopped displaying.
+#3632998 by a.dmitriiev, a.dmitriiev, DamienMcKenna: Revert change to
+  MetaNameBase::label(), description() that broke API compatibility.
+#3633219 by f0ns, DamienMcKenna: Test coverage for plugin definitions.
+#3616901 by shubhamgoel, DamienMcKenna: Deprecated metatag_page_manager.
+#3582789 by shubhamgoel, DamienMcKenna: Fixed Forum tests against 11.4.x.
+#3247275 by andybody, vbouchet, primsi, DamienMcKenna, berdir: Remove canonical
+  URL tag for 403, 404 pages.
+#3633335 by DamienMcKenna, joegraduate: Fixed tests.
+
+
 Metatag 2.2.1, 2026-10-24
 -------------------------
 #3550674 by damienmckenna: Refactored URL logic in MetaNameBase.

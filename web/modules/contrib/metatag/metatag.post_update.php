@@ -784,3 +784,44 @@ function metatag_post_update_v2_05_twitter_type_changes(&$sandbox) {
     return $changed;
   });
 }
+
+/**
+ * Remove canonical URL, shortlink and robots from the 403/404 defaults.
+ */
+function metatag_post_update_v2_06_error_page_defaults() {
+  $updated = [];
+
+  foreach (['403', '404'] as $id) {
+    $default = MetatagDefaults::load($id);
+    if (!$default) {
+      continue;
+    }
+    $tags = $default->get('tags');
+    $changed = FALSE;
+    // Only change values that are still the previous defaults.
+    foreach (['canonical_url', 'shortlink'] as $tag) {
+      if (($tags[$tag] ?? NULL) === '[site:url]') {
+        $tags[$tag] = '<none>';
+        $changed = TRUE;
+      }
+    }
+    if ($id === '403' && ($tags['robots'] ?? NULL) === 'noindex') {
+      unset($tags['robots']);
+      $changed = TRUE;
+    }
+    if ($changed) {
+      $updated[] = $id;
+      $default->set('tags', $tags);
+      $default->save();
+    }
+  }
+
+  if ($updated) {
+    return t('The Metatag configuration for @items page(s) has been updated. Make sure to export the configuration to avoid losing the changes.', [
+      '@items' => implode(', ', $updated),
+    ]);
+  }
+  else {
+    return t('No changes needed to be made.');
+  }
+}

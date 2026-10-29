@@ -25,7 +25,7 @@ class EntityHooks {
     $base_table = $entity_type->getBaseTable();
     $canonical_template_exists = $entity_type->hasLinkTemplate('canonical');
     // Certain classes are just not supported.
-    $original_class = DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '11.4.0', fn() => $entity_type->getDecoratedClasses()[0], fn() => $entity_type->getOriginalClass());
+    $original_class = DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '11.4.0', fn() => $entity_type->getDecoratedClasses()[0] ?? $entity_type->getClass(), fn() => $entity_type->getOriginalClass());
     $classes_to_skip = [
       'Drupal\comment\Entity\Comment',
     ];

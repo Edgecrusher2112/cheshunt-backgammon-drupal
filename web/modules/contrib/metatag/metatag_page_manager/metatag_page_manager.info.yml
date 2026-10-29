@@ -3,11 +3,13 @@ type: module
 description: Provides metatag support for Page Manager variants.
 core_version_requirement: ^10.3 || ^11 || ^12
 package: SEO
+lifecycle: deprecated
+lifecycle_link: 'https://www.drupal.org/project/metatag'
 dependencies:
   - page_manager:page_manager
   - metatag:metatag
 
-# Information added by Drupal.org packaging script on 2026-10-24
-version: '2.2.1'
+# Information added by Drupal.org packaging script on 2026-10-29
+version: '2.2.4'
 project: 'metatag'
-datestamp: 1792864794
+datestamp: 1793239111

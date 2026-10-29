@@ -11,7 +11,7 @@ use Drupal\metatag\MetatagType;
  */
 #[MetatagTag(
   id: 'shortlink',
-  label: new TranslatableMarkup('Set cookie'),
+  label: new TranslatableMarkup('Shortlink URL'),
   name: 'shortlink',
   group: 'advanced',
   type: MetatagType::Uri,

@@ -21,9 +21,8 @@
     "docs": "https://www.drupal.org/docs/8/modules/metatag"
   },
   "require": {
-    "php": ">=8.0",
     "drupal/core": "^10.3 || ^11",
-    "drupal/token": "^1.0"
+    "drupal/token": "^1.17"
   },
   "require-dev": {
     "drupal/diff": "*",

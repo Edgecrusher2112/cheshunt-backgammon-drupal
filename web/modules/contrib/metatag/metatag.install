@@ -242,3 +242,10 @@ function metatag_update_9401() {
   $config->set('tag_trim_end', "|.,-:;/+&([{\"'");
   $config->save();
 }
+
+/**
+ * Empty update script to force a cache rebuild for the new services.
+ */
+function metatag_update_9402() {
+  // Nothing to do besides rebuild the caches.
+}

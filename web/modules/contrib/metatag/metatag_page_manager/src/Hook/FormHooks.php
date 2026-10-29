@@ -12,6 +12,10 @@ class FormHooks {
 
   /**
    * Implements hook_form_FORM_ID_alter().
+   *
+   * @deprecated in metatag:2.2.2 and is removed from metatag:3.0.0. No replacement is available.
+   *
+   * @see https://www.drupal.org/node/3633239
    */
   #[Hook('form_metatag_defaults_add_form_alter')]
   public function formMetatagDefaultsAddFormAlter(&$form, FormStateInterface $form_state, $form_id) {

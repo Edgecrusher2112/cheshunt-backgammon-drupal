@@ -11,7 +11,7 @@ use Drupal\Tests\BrowserTestBase;
  *
  * @group metatag
  */
-class RemoveCoreMetaTags extends BrowserTestBase {
+class RemoveCoreMetaTagsTest extends BrowserTestBase {
 
   // Contains helper methods.
   use MetatagHelperTrait;

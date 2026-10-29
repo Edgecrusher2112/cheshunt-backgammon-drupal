@@ -10,6 +10,7 @@ use Drupal\Component\Utility\Random;
 use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\metatag\MetatagSeparator;
@@ -18,8 +19,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Each meta tag will extend this base.
  */
-abstract class MetaNameBase extends PluginBase {
-  // Implements ContainerFactoryPluginInterface {.
+abstract class MetaNameBase extends PluginBase implements ContainerFactoryPluginInterface {
+
   use MetatagSeparator;
   use StringTranslationTrait;
 
@@ -133,6 +134,20 @@ abstract class MetaNameBase extends PluginBase {
   protected $configFactory;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * The Metatag trimmer service.
+   *
+   * @var \Drupal\metatag\MetatagTrimmer
+   */
+  protected $trimmer;
+
+  /**
    * The string this tag uses for the tag itself.
    *
    * @var string
@@ -171,10 +186,6 @@ abstract class MetaNameBase extends PluginBase {
     $this->trimmable = !empty($plugin_definition['trimmable']);
     $this->long = !empty($plugin_definition['long']);
     $this->absoluteUrl = !empty($plugin_definition['absolute_url']);
-    $this->request = \Drupal::request();
-
-    // @todo Is there a DI-friendly way of doing this?
-    $this->configFactory = \Drupal::service('config.factory');
 
     // If this was loaded via an Annotation, unwrap the Translation object.
     // Otherwise it was an Attribute, so 'label' is already a
@@ -183,10 +194,10 @@ abstract class MetaNameBase extends PluginBase {
       ? $plugin_definition['label']->get()
       : $plugin_definition['label'];
     // Now do the same for description, if it was set.
-    if (!empty($configuration['description'])) {
-      $this->description = $configuration['description'] instanceof Translation
-        ? $configuration['description']->get()
-        : $configuration['description'];
+    if (!empty($plugin_definition['description'])) {
+      $this->description = $plugin_definition['description'] instanceof Translation
+        ? $plugin_definition['description']->get()
+        : $plugin_definition['description'];
     }
     else {
       $this->description = NULL;
@@ -200,12 +211,11 @@ abstract class MetaNameBase extends PluginBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition
-    );
-    $instance->setConfigFactory($container->get('config.factory'));
+    $instance = new static($configuration, $plugin_id, $plugin_definition);
+    $instance->request = $container->get('request_stack')->getCurrentRequest();
+    $instance->configFactory = $container->get('config.factory');
+    $instance->moduleHandler = $container->get('module_handler');
+    $instance->trimmer = $container->get('metatag.trimmer');
     return $instance;
   }
 
@@ -232,20 +242,20 @@ abstract class MetaNameBase extends PluginBase {
   /**
    * This meta tag's label.
    *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|string
    *   The label.
    */
-  public function label(): TranslatableMarkup {
+  public function label(): TranslatableMarkup|string {
     return $this->label;
   }
 
   /**
    * The meta tag's description.
    *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|string|null
    *   This meta tag's description.
    */
-  public function description(): ?TranslatableMarkup {
+  public function description(): TranslatableMarkup|string|null {
     return $this->description;
   }
 
@@ -444,7 +454,7 @@ abstract class MetaNameBase extends PluginBase {
     // Add a final note about adding the "<none>" value.
     $form['#description'] .= ' ' . $this->t('Set to %none to disable inheritance of the parent value and prevent the output of this metatag entirely.', ['%none' => '<none>']);
 
-    $settings = \Drupal::config('metatag.settings');
+    $settings = $this->configFactory->get('metatag.settings');
     $trimlengths = $settings->get('tag_trim_maxlength') ?? [];
     if (!empty($trimlengths['metatag_maxlength_' . $this->id])) {
       $maxlength = intval($trimlengths['metatag_maxlength_' . $this->id]);
@@ -452,7 +462,7 @@ abstract class MetaNameBase extends PluginBase {
         $form['#description'] .= ' ' . $this->t('This will be truncated to a maximum of %max characters after any tokens are processed.', ['%max' => $maxlength]);
 
         // Optional support for the Maxlength module.
-        if (\Drupal::moduleHandler()->moduleExists('maxlength')) {
+        if ($this->moduleHandler->moduleExists('maxlength')) {
           if ($settings->get('use_maxlength') ?? TRUE) {
             $form['#attributes']['class'][] = 'maxlength';
             $form['#attached']['library'][] = 'maxlength/maxlength';
@@ -685,7 +695,7 @@ abstract class MetaNameBase extends PluginBase {
    */
   protected function trimValue($value): string {
     if (TRUE === $this->trimmable) {
-      $settings = \Drupal::config('metatag.settings');
+      $settings = $this->configFactory->get('metatag.settings');
       $trimMethod = $settings->get('tag_trim_method');
       $trimMaxlengthArray = $settings->get('tag_trim_maxlength');
       $trimEndChars = $settings->get('tag_trim_end');
@@ -699,8 +709,7 @@ abstract class MetaNameBase extends PluginBase {
         }
       }
       $suffix = (string) $settings->get('trim_suffix');
-      $trimmerService = \Drupal::service('metatag.trimmer');
-      $value = $trimmerService->trimByMethod($value, $currentMaxValue, $trimMethod, $trimEndChars, $suffix);
+      $value = $this->trimmer->trimByMethod($value, $currentMaxValue, $trimMethod, $trimEndChars, $suffix);
     }
     return $value;
   }
