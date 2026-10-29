@@ -2,7 +2,7 @@ backgammon_knockout.list:
   path: '/knockouts'
   defaults:
     _controller: '\Drupal\backgammon_knockout\Controller\TournamentsController::build'
-    _title: 'Knockout Tournaments'
+    _title: 'Knockouts'
   requirements:
     _permission: 'access content'
 

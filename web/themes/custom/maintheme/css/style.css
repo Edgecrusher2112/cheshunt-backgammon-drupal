@@ -21380,7 +21380,7 @@ code {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
+  width: 2rem;
   height: 2.75rem;
   padding: 0;
   border: 0;
@@ -21473,7 +21473,7 @@ code {
   align-items: center;
   justify-content: center;
   height: 2.75rem;
-  padding: 0 0.65rem;
+  padding: 0 0.2rem;
   border: 0;
   color: #ff2d78;
   font-size: 1.15rem;

@@ -112,6 +112,10 @@ function backgammon_league_node_view(array &$build, EntityInterface $entity, Ent
       static fn($value, $index) => [
         'data' => $value,
         'class' => array_filter([
+          $index === 1 ? 'col-7' : (in_array($index, [2, 7], TRUE) ? 'col-2' : 'col-1'),
+          $index === 1 ? 'col-md-5' : 'col-md-1',
+          in_array($index, [3, 4, 5, 6], TRUE) ? 'd-none' : NULL,
+          in_array($index, [3, 4, 5, 6], TRUE) ? 'd-md-table-cell' : NULL,
           $index === 1 ? 'text-start' : 'text-center',
           $index === 0 ? 'text-primary' : NULL,
           in_array($index, [1, 2, 7], TRUE) ? 'fw-bold' : NULL,
@@ -124,14 +128,14 @@ function backgammon_league_node_view(array &$build, EntityInterface $entity, Ent
   $build['league_standings'] = [
     '#type' => 'table', '#weight' => 40,
     '#header' => [
-      ['data' => '', 'class' => ['text-center', 'fw-bold']],
-      ['data' => '', 'class' => ['text-start', 'fw-bold']],
-      ['data' => t('P'), 'class' => ['text-center', 'fw-bold']],
-      ['data' => t('W'), 'class' => ['text-center', 'fw-bold']],
-      ['data' => t('L'), 'class' => ['text-center', 'fw-bold']],
-      ['data' => t('BG'), 'class' => ['text-center', 'fw-bold']],
-      ['data' => t('G'), 'class' => ['text-center', 'fw-bold']],
-      ['data' => t('PTS'), 'class' => ['text-center', 'fw-bold']],
+      ['data' => '', 'class' => ['col-1', 'text-center', 'fw-bold']],
+      ['data' => '', 'class' => ['col-7', 'col-md-5', 'text-start', 'fw-bold']],
+      ['data' => t('P'), 'class' => ['col-2', 'col-md-1', 'text-center', 'fw-bold']],
+      ['data' => t('W'), 'class' => ['col-1', 'd-none', 'd-md-table-cell', 'text-center', 'fw-bold']],
+      ['data' => t('L'), 'class' => ['col-1', 'd-none', 'd-md-table-cell', 'text-center', 'fw-bold']],
+      ['data' => t('BG'), 'class' => ['col-1', 'd-none', 'd-md-table-cell', 'text-center', 'fw-bold']],
+      ['data' => t('G'), 'class' => ['col-1', 'd-none', 'd-md-table-cell', 'text-center', 'fw-bold']],
+      ['data' => t('PTS'), 'class' => ['col-2', 'col-md-1', 'text-center', 'fw-bold']],
     ],
     '#rows' => $rows, '#empty' => t('Add season players to display standings.'),
   ];
@@ -153,8 +157,8 @@ function backgammon_league_node_view(array &$build, EntityInterface $entity, Ent
     $entered = \Drupal::service('backgammon_matches.results')->hasResult($match);
     $score_1 = $entered ? (int) $match->get('field_bg_score_1')->value : NULL;
     $score_2 = $entered ? (int) $match->get('field_bg_score_2')->value : NULL;
-    $player_1_classes = ['col-4', 'text-end', 'fw-bold'];
-    $player_2_classes = ['col-4', 'text-start', 'fw-bold'];
+    $player_1_classes = ['col-5', 'col-md-4', 'text-end', 'fw-bold'];
+    $player_2_classes = ['col-5', 'col-md-4', 'text-start', 'fw-bold'];
     if ($entered && $score_1 !== $score_2) {
       if ($score_1 < $score_2) {
         $player_1_classes[] = 'text-muted';
@@ -174,9 +178,9 @@ function backgammon_league_node_view(array &$build, EntityInterface $entity, Ent
     }
     $matches[] = [
       ['data' => $names[0], 'class' => $player_1_classes],
-      ['data' => $entered ? $score_1 : '', 'class' => ['col-1', 'text-center', 'text-primary']],
-      ['data' => $entered ? 'v' : '-', 'class' => ['col-2', 'text-center', 'fw-bold']],
-      ['data' => $entered ? $score_2 : '', 'class' => ['col-1', 'text-center', 'text-primary']],
+      ['data' => $entered ? $score_1 : '', 'class' => ['col-auto', 'col-md-1', 'text-center', 'text-primary']],
+      ['data' => $entered ? 'v' : '-', 'class' => ['col-auto', 'col-md-2', 'text-center', 'fw-bold']],
+      ['data' => $entered ? $score_2 : '', 'class' => ['col-auto', 'col-md-1', 'text-center', 'text-primary']],
       ['data' => $names[1], 'class' => $player_2_classes],
     ];
   }

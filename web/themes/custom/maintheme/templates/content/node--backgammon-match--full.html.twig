@@ -21,16 +21,16 @@
         {% if node.field_bk_tournament.target_id %}
           <h2 class="fs-4">{{ content.field_bk_tournament.0 }}</h2>
         {% elseif node.field_bl_season_ref.target_id %}
-          <h2 class="fs-5">{{ content.field_bl_season_ref.0 }}</h3>
+          <h2 class="fs-5">{{ content.field_bl_season_ref.0 }}</h2>
         {% endif %}
 
         {# Scores and players #}
-        <table class="table">
+        <table class="table align-middle">
           <tbody>
-            <tr class="fs-4" valign="middle">
-              <td class="text-end fw-bold col-5">{{ content.field_bg_player_1.0 }}</td>
-              <td class="text-center fw-bold col-2">{{ content.field_bg_score_1.0 }}<strong class="d-inline-flex mx-3">v</strong>{{ content.field_bg_score_2.0 }}</td>
-              <td class="text-start fw-bold col-5">{{ content.field_bg_player_2.0 }}</td>
+            <tr>
+              <td class="text-end fw-bold fs-6 col-5">{{ content.field_bg_player_1.0 }}</td>
+              <td class="text-center fw-bold col-2 text-nowrap px-1">{{ content.field_bg_score_1.0 }}<strong class="d-inline-flex mx-1">v</strong>{{ content.field_bg_score_2.0 }}</td>
+              <td class="text-start fw-bold fs-6 col-5">{{ content.field_bg_player_2.0 }}</td>
             </tr>
             </tbody>
         </table>

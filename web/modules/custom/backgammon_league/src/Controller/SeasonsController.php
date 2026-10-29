@@ -26,19 +26,33 @@ class SeasonsController extends ControllerBase {
           $cache->addCacheableDependency($runner_up);
         }
         $rows[] = [
-          ['data' => Link::fromTextAndUrl($season->label(), $season->toUrl())->toRenderable()],
-          $this->t('@start - @end', [
-            '@start' => $season->get('field_bl_start')->value,
-            '@end' => $season->get('field_bl_end')->value,
-          ]),
-          $winner?->getDisplayName() ?? '—',
-          $runner_up?->getDisplayName() ?? '—',
+          ['data' => Link::fromTextAndUrl($season->label(), $season->toUrl())->toRenderable(), 'class' => ['col-12', 'col-md-4']],
+          ['data' => [
+            'start' => [
+              '#type' => 'html_tag',
+              '#tag' => 'div',
+              '#value' => $this->t('<strong>Start:</strong> @date', ['@date' => $season->get('field_bl_start')->value]),
+            ],
+            'end' => [
+              '#type' => 'html_tag',
+              '#tag' => 'div',
+              '#value' => $this->t('<strong>End:</strong> @date', ['@date' => $season->get('field_bl_end')->value]),
+            ],
+          ], 'class' => ['col-md-4', 'd-none', 'd-md-table-cell']],
+          ['data' => $winner?->getDisplayName() ?? '—', 'class' => ['col-md-2', 'd-none', 'd-md-table-cell']],
+          ['data' => $runner_up?->getDisplayName() ?? '—', 'class' => ['col-md-2', 'd-none', 'd-md-table-cell']],
         ];
       }
     }
     $build['seasons'] = [
       '#type' => 'table',
-      '#header' => [$this->t('Season'), $this->t('Dates'), $this->t('Winner'), $this->t('Runner-Up')],
+      '#attributes' => ['class' => ['align-middle']],
+      '#header' => [
+        ['data' => $this->t('Season'), 'class' => ['col-12', 'col-md-4']],
+        ['data' => $this->t('Dates'), 'class' => ['col-md-4', 'd-none', 'd-md-table-cell']],
+        ['data' => $this->t('Winner'), 'class' => ['col-md-2', 'd-none', 'd-md-table-cell']],
+        ['data' => $this->t('Runner-Up'), 'class' => ['col-md-2', 'd-none', 'd-md-table-cell']],
+      ],
       '#rows' => $rows,
       '#empty' => $this->t('No seasons created yet.'),
     ];

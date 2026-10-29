@@ -167,16 +167,16 @@ class MyFixturesController extends ControllerBase {
         }
         $league_groups[$season_id]['rows'][] = [
           'data' => [
-            ['data' => $fixture_stage ?? '—', 'rowspan' => 2, 'class' => ['col-3', 'fw-bold', 'align-middle']],
-            ['data' => $player_links[0], 'class' => ['col-5', 'align-middle']],
+            ['data' => $fixture_stage ?? '—', 'rowspan' => 2, 'class' => ['col-3', 'fw-bold', 'align-middle', 'd-none', 'd-md-table-cell']],
+            ['data' => $player_links[0], 'class' => ['col-6', 'col-md-5', 'align-middle']],
             ['data' => $scores[0], 'class' => ['col-1', 'text-center', 'fw-bold', 'align-middle']],
-            ['data' => $operations, 'rowspan' => 2, 'class' => ['col-3', 'text-end', 'align-middle']],
+            ['data' => $operations, 'rowspan' => 2, 'class' => ['col-5', 'col-md-3', 'text-end', 'align-middle']],
           ],
           'class' => $row_classes,
         ];
         $league_groups[$season_id]['rows'][] = [
           'data' => [
-            ['data' => $player_links[1], 'class' => ['col-5', 'align-middle']],
+            ['data' => $player_links[1], 'class' => ['col-6', 'col-md-5', 'align-middle']],
             ['data' => $scores[1], 'class' => ['col-1', 'text-center', 'fw-bold', 'align-middle']],
           ],
           'class' => $row_classes,
@@ -202,16 +202,16 @@ class MyFixturesController extends ControllerBase {
         }
         $knockout_groups[$tournament_id]['rows'][] = [
           'data' => [
-            ['data' => $fixture_stage ?? '—', 'rowspan' => 2, 'class' => ['col-3', 'fw-bold', 'align-middle']],
-            ['data' => $player_links[0], 'class' => ['col-5', 'align-middle']],
+            ['data' => $fixture_stage ?? '—', 'rowspan' => 2, 'class' => ['col-3', 'fw-bold', 'align-middle', 'd-none', 'd-md-table-cell']],
+            ['data' => $player_links[0], 'class' => ['col-6', 'col-md-5', 'align-middle']],
             ['data' => $scores[0], 'class' => ['col-1', 'text-center', 'fw-bold', 'align-middle']],
-            ['data' => $operations, 'rowspan' => 2, 'class' => ['col-3', 'text-end', 'align-middle']],
+            ['data' => $operations, 'rowspan' => 2, 'class' => ['col-5', 'col-md-3', 'text-end', 'align-middle']],
           ],
           'class' => $row_classes,
         ];
         $knockout_groups[$tournament_id]['rows'][] = [
           'data' => [
-            ['data' => $player_links[1], 'class' => ['col-5', 'align-middle']],
+            ['data' => $player_links[1], 'class' => ['col-6', 'col-md-5', 'align-middle']],
             ['data' => $scores[1], 'class' => ['col-1', 'text-center', 'fw-bold', 'align-middle']],
           ],
           'class' => $row_classes,

@@ -2,9 +2,9 @@
 <header role="banner" class="site-header">
   <nav class="navbar" aria-label="{{ 'Main navigation'|t }}">
     <div class="{{ b5_top_container|default('container') }}">
-      <a class="navbar-brand d-flex align-items-center fw-bold" href="{{ front_page }}">
+      <a class="navbar-brand d-flex align-items-center fw-bold" href="{{ front_page }}" aria-label="{{ 'Cheshunt Backgammon home'|t }}">
         <img class="site-logo" src="{{ base_path ~ directory }}/logo.svg" alt="" width="52" height="52">
-        <span class="site-brand-text">
+        <span class="site-brand-text d-none d-md-block">
           <span class="d-block">{{ 'Cheshunt Backgammon'|t }}</span>
           <span class="site-strapline d-block fw-normal">{{ 'Backgammon In East Herts'|t }}</span>
         </span>
@@ -20,7 +20,7 @@
           <i class="theme-toggle__icon theme-toggle__icon--dark bi bi-moon-stars-fill" aria-hidden="true"></i>
           <i class="theme-toggle__icon theme-toggle__icon--light bi bi-sun-fill" aria-hidden="true"></i>
         </button>
-        <button class="navbar-toggler ms-2" type="button" data-bs-toggle="offcanvas"
+        <button class="navbar-toggler ms-0" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#site-navigation" aria-controls="site-navigation"
                 aria-expanded="false" aria-label="{{ 'Toggle navigation'|t }}">
           <span class="navbar-toggler-icon"></span>

@@ -121,8 +121,8 @@ function backgammon_knockout_node_view(array &$build, EntityInterface $entity, E
           }
         }
       }
-      $player_1_classes = ['col-4', 'text-end', 'fw-bold'];
-      $player_2_classes = ['col-4', 'text-start', 'fw-bold'];
+      $player_1_classes = ['col-5', 'col-md-4', 'text-end', 'fw-bold'];
+      $player_2_classes = ['col-5', 'col-md-4', 'text-start', 'fw-bold'];
       if ($has_result && (int) $scores[0] !== (int) $scores[1]) {
         if ((int) $scores[0] < (int) $scores[1]) {
           $player_1_classes[] = 'text-muted';
@@ -133,9 +133,9 @@ function backgammon_knockout_node_view(array &$build, EntityInterface $entity, E
       }
       $rows[] = [
         ['data' => $names[0], 'class' => $player_1_classes],
-        ['data' => $scores[0], 'class' => ['col-1', 'text-center', 'text-primary']],
-        ['data' => $has_result ? 'v' : '-', 'class' => ['col-2', 'text-center', 'fw-bold']],
-        ['data' => $scores[1], 'class' => ['col-1', 'text-center', 'text-primary']],
+        ['data' => $scores[0], 'class' => ['col-auto', 'col-md-1', 'text-center', 'text-primary']],
+        ['data' => $has_result ? 'v' : '-', 'class' => ['col-auto', 'col-md-2', 'text-center', 'fw-bold']],
+        ['data' => $scores[1], 'class' => ['col-auto', 'col-md-1', 'text-center', 'text-primary']],
         ['data' => $names[1], 'class' => $player_2_classes],
       ];
     }

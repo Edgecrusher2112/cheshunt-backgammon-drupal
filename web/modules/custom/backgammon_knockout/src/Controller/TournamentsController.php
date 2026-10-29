@@ -23,11 +23,36 @@ class TournamentsController extends ControllerBase {
       $start = $tournament->get('field_bk_start')->value;
       $end = $tournament->get('field_bk_end')->value;
       $dates = $start && $end
-        ? $this->t('@start - @end', ['@start' => $start, '@end' => $end])
+        ? [
+          'start' => [
+            '#type' => 'html_tag',
+            '#tag' => 'div',
+            '#value' => $this->t('<strong>Start:</strong> @date', ['@date' => $start]),
+          ],
+          'end' => [
+            '#type' => 'html_tag',
+            '#tag' => 'div',
+            '#value' => $this->t('<strong>End:</strong> @date', ['@date' => $end]),
+          ],
+        ]
         : '—';
-      $rows[] = [['data' => Link::fromTextAndUrl($tournament->label(), $tournament->toUrl())->toRenderable()], $dates, $winner?->getDisplayName() ?? $this->t('Awaiting winner')];
+      $rows[] = [
+        ['data' => Link::fromTextAndUrl($tournament->label(), $tournament->toUrl())->toRenderable(), 'class' => ['col-12', 'col-md-4']],
+        ['data' => $dates, 'class' => ['col-md-4', 'd-none', 'd-md-table-cell']],
+        ['data' => $winner?->getDisplayName() ?? $this->t('Awaiting winner'), 'class' => ['col-md-4', 'd-none', 'd-md-table-cell']],
+      ];
     }
-    $build['tournaments'] = ['#type' => 'table', '#header' => [$this->t('Tournament'), $this->t('Dates'), $this->t('Winner')], '#rows' => $rows, '#empty' => $this->t('No knockout tournaments created yet.')];
+    $build['tournaments'] = [
+      '#type' => 'table',
+      '#attributes' => ['class' => ['align-middle']],
+      '#header' => [
+        ['data' => $this->t('Tournament'), 'class' => ['col-12', 'col-md-4']],
+        ['data' => $this->t('Dates'), 'class' => ['col-md-4', 'd-none', 'd-md-table-cell']],
+        ['data' => $this->t('Winner'), 'class' => ['col-md-4', 'd-none', 'd-md-table-cell']],
+      ],
+      '#rows' => $rows,
+      '#empty' => $this->t('No knockout tournaments created yet.'),
+    ];
     $build['pager'] = ['#type' => 'pager'];
     $cache->applyTo($build);
     return $build;
